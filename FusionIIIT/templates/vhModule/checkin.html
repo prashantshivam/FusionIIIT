@@ -1,9 +1,8 @@
 {% load static %}
-
 {% block checkin %}
     <div class="ui pointing secondary menu">
         <a class="active item" data-tab="checkin">
-            Checkin
+            Guest Check-In
         </a>
     </div>
 
@@ -67,28 +66,8 @@
                         <div class="field">
                             {% comment %}number of rooms  starts here!{% endcomment %}
                             <label>No Of Rooms:</label>
-                            <div class="ui search selection dropdown">
-                                <input name="Select" type="hidden">
-                                <i class="dropdown icon"></i>
-
-                                <div class="default text">Select</div>
-
-                                <div class="menu">
-                                    <div class="item" data-value="1">
-                                        1
-                                    </div>
-
-                                    <div class="item" data-value="2">
-                                        2
-                                    </div>
-                                    <div class="item" data-value="3">
-                                        3
-                                    </div>
-
-                                    <div class="item" data-value="4">
-                                        4
-                                    </div>
-                                </div>
+                            <div class="ui search selection">
+                                <input name="rooms" type="number">
                             </div>
                         </div>
                     </div>

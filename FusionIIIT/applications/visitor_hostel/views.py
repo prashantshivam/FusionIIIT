@@ -138,9 +138,7 @@ def check_in(request):
         return render(request, "vhModule/checkin1.html", {'context': context})
 
     else:
-        print("check_in clicked")
         book_room = Book_room.objects.filter(booking_from__lte=datetime.datetime.today())
-        print(book_room)
         room_status = Room_Status.objects.filter(status='Booked').distinct()
         context1 = []
         for i in room_status:
