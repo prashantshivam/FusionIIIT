@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^bill/', views.bill_generation, name = 'bill_generation'),
     url(r'^check_availability/', views.Room_availabity, name = 'Room_availabity'),
     url(r'^bookaroom/', views.BookaRoom, name = 'room booking'),
+    url(r'^add-to-inventory/', views.add_to_inventory, name = 'add_to_inventory'),
 ]

@@ -549,3 +549,5 @@ def BookaRoom(request):
             return render(request,"vhModule/bookaroom1.html",{'form':form})
 
 
+def add_to_inventory(request):
+    return
