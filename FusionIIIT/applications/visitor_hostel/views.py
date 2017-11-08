@@ -12,18 +12,12 @@ from django.contrib.auth import logout
 
 
 def visitorhostel(request):
-    context={}
+
+    context = {}
     bookaRoom = Book_room.objects.filter(status = "Pending")
-    emptyRoom = Room_Status.objects.filter(status="Available")   
-    
-
+    emptyRoom = Room_Status.objects.filter(status="Available")
     form = ViewBooking()
-    
-
-
     cancelBooking = Book_room.objects.filter(status = "Confirm")
-
-
     book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
     room_status = Room_Status.objects.all().filter(status='Booked').distinct()
     room_status1 = []
@@ -36,10 +30,6 @@ def visitorhostel(request):
         if x not in checkIn:
             checkIn.append(x)
     print(checkIn)
-
-
-
-
     room_status=Room_Status.objects.filter(status = "CheckedIn")
     book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
     context1 = []
@@ -53,18 +43,8 @@ def visitorhostel(request):
         if x not in checkOut:
             checkOut.append(x)
     print(checkOut)
-
-
-
-
     form=RoomAvailability()
-    
-
     form=Room_booking()
-    
-
-
-    print("gluqegurg")
     return render(request, "vhModule/visitorhostel.html", context)
 
 def vh_homepage(request):
@@ -533,4 +513,4 @@ def BookaRoom(request):
 
 
 def add_to_inventory(request):
-    return
+    return 0

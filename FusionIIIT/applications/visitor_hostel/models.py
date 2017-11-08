@@ -61,8 +61,8 @@ class Book_room(models.Model):
     check_in = models.DateField(null=True, blank=True)
     check_out = models.DateField(null=True, blank=True)
 
-    # def __str__(self):
-    #     return str(self.id)
+    def __str__(self):
+        return str(self.id)
 
 class Visitor_bill(models.Model):
     visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE)
