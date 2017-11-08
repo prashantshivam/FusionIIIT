@@ -13,26 +13,15 @@ from django.contrib.auth import logout
 
 def visitorhostel(request):
 
-    context = Book_room.objects.filter(status = "Pending")
-    room = Room_Status.objects.filter(status="Available")
-    print("hello")
-    if not context:
-        messages.success(request, 'No new request')
-        return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-    return render(request, "vhModule/vh_view_booking_request.html" ,{ 'context' : context , 'room' : room })
+    bookaRoom = Book_room.objects.filter(status = "Pending")
+    emptyRoom = Room_Status.objects.filter(status="Available")   
+    
 
     form = ViewBooking()
     return render(request, "vhModule/input_booking_date.html" , { 'form' : form})
 
 
     cancelBooking = Book_room.objects.filter(status = "Confirm")
-    print(context)
-    if not cancelBooking:
-        messages.success(request, 'No confirm booking available')
-        return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-    return render(request, "vhModule/cancel_booked_room.html" , { 'context' : cancelBooking})
-
-
 
 
     book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
@@ -47,10 +36,7 @@ def visitorhostel(request):
         if x not in checkIn:
             checkIn.append(x)
     print(checkIn)
-    if not checkIn:
-        messages.success(request, 'No booking available')
-        return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-    return render(request, "vhModule/checkin1.html" , { 'context' :CheckIn})
+
 
 
 
@@ -67,10 +53,7 @@ def visitorhostel(request):
         if x not in checkOut:
             checkOut.append(x)
     print(checkOut)
-    if not context:
-        messages.success(request, 'No guest checked in currently')
-        return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-    return render(request, "vhModule/checkout1.html" , { 'context' : checkOut})
+
 
 
 
