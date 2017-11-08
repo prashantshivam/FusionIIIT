@@ -56,7 +56,7 @@ class Book_room(models.Model):
     person_count = models.IntegerField(default=1)
     purpose = models.TextField()
     booking_from = models.DateField()
-    Booking_to = models.DateField()
+    booking_to = models.DateField()
     status = models.CharField(max_length=10, choices=BOOK_ROOM , default ="Pending")
     remark = models.CharField(max_length=40,blank=True)
     check_in = models.DateField(null=True, blank=True)
