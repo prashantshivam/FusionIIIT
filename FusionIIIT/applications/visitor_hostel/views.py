@@ -12,13 +12,13 @@ from django.contrib.auth import logout
 
 
 def visitorhostel(request):
-
+    context={}
     bookaRoom = Book_room.objects.filter(status = "Pending")
     emptyRoom = Room_Status.objects.filter(status="Available")   
     
 
     form = ViewBooking()
-    return render(request, "vhModule/input_booking_date.html" , { 'form' : form})
+    
 
 
     cancelBooking = Book_room.objects.filter(status = "Confirm")
@@ -58,10 +58,10 @@ def visitorhostel(request):
 
 
     form=RoomAvailability()
-    return render(request,"vhModule/checkavailability1.html",{'form':form})
+    
 
     form=Room_booking()
-    return render(request,"vhModule/bookaroom1.html",{'form':form})
+    
 
 
     print("gluqegurg")
