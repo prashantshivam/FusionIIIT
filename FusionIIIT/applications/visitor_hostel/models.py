@@ -36,7 +36,6 @@ BOOK_ROOM = (
 
 
 class Visitor(models.Model):
-    visitor_id = models.AutoField(primary_key=True)
     visitor_name = models.CharField(max_length=40)
     visitor_email = models.CharField(max_length=40)
     visitor_phone = models.CharField(max_length=12)
