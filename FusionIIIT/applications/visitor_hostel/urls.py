@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^check_availability/', views.Room_availabity, name = 'Room_availabity'),
     url(r'^bookaroom/', views.BookaRoom, name = 'room booking'),
     url(r'^add-to-inventory/', views.add_to_inventory, name = 'add_to_inventory'),
+    url(r'^edit-room-status/', views.edit_room_status, name = 'edit_room_status'),
 ]

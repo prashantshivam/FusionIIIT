@@ -22,8 +22,8 @@ def visitorhostel(request):
     room_status = Room_Status.objects.all().filter(status='Booked').distinct()
     room_status1 = []
     for i in room_status:
-        if i.br_id.booking_from<=datetime.date.today():
-            room_status1.append(i.br_id)
+        if i.booking_from<=datetime.date.today():
+            room_status1.append(i.id)
     print(room_status1)
     checkIn=[]
     for x in room_status1:
@@ -34,8 +34,8 @@ def visitorhostel(request):
     book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
     context1 = []
     for i in room_status:
-        if i.br_id.booking_from<=datetime.date.today():
-            context1.append(i.br_id)
+        if i.booking_from<=datetime.date.today():
+            context1.append(i.id)
             # print('Room', room_status)
     print(context1)
     checkOut=[]
@@ -49,7 +49,6 @@ def visitorhostel(request):
 
 def vh_homepage(request):
     context = {}
-
     return render(request, "vhModule/vh_homepage.html", context)
 
 @login_required(login_url='/accounts/login/')
@@ -513,4 +512,8 @@ def BookaRoom(request):
 
 
 def add_to_inventory(request):
-    return 0
+    return
+
+
+def edit_room_status(request):
+    return

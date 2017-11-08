@@ -218,7 +218,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/visitohostel/add-to-inventory/',
+                url: '/visitorhostel/add-to-inventory/',
                 data: {
                     'item' : $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value,
                     'quantity' : $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value,
@@ -239,4 +239,37 @@
         });
     </script>
     <!-- Inventory Js Ends -->
+
+    <!-- Room Status Js -->
+    <script type="text/javascript">
+        $('#edit-room-status').click(function(event){
+            var boxes = $('.editable').length;
+            for( var i=0; i<boxes; i++){
+                $('.editable')[i].innerHTML = '<div class="ui checkbox"><input name="example" type="checkbox"><label></label></div>';
+            }
+            $('#room-status-submit')[0].style.display = 'block';
+        });
+
+        $('#room-status-submit').click(function(event){
+            $.ajax({
+                type: 'POST',
+                url: '/visitorhostel/edit-room-status/',
+                data: {
+
+                    'csrfmiddlewaretoken': '{{csrf_token}}'
+                },
+                success: function(data) {
+                    $('#room-status-submit')[0].style.display = 'none';
+                    var boxes = $('.editable').length;
+                    for( var i=0; i<boxes; i++){
+                        $('.editable')[i].innerHTML = '<div class="ui checkbox"><input name="example" type="checkbox"><label></label></div>';
+                    }
+                },
+                error: function(data, err) {
+                    alert(err.message);
+                }
+            });
+        });
+    </script>
+    <!-- Room status Js ends -->
 {% endblock %}

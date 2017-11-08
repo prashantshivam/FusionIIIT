@@ -5,7 +5,7 @@
             Room Status
         </a>
         <div style="width: 100%;">
-            <i class="edit icon right" style="padding-left: 90%; height: 100%;"></i>
+            <i class="edit icon right" style="font-size: 30px; float: right;"  id="edit-room-status"></i>
         </div>
     </div>
 
@@ -35,28 +35,25 @@
                     <td>
                         AR - 0898
                     </td>
-
                     <td>
                         First
                     </td>
-
-                    <td>
+                    <td class="editable">
                         <i class="large green checkmark icon"></i>
                     </td>
-
-                    <td>
-
+                    <td class="editable">
                     </td>
-
-                    <td>
-
+                    <td class="editable">
                     </td>
-                    <td>
-
+                    <td class="editable">
                     </td>
                 </tr>
                 </tbody>
             </table>
+
+            <button class="ui primary right floated button" style="display: none;" id="room-status-submit">
+                Submit
+            </button>
         </div>
     </div>
 {% endblock %}
