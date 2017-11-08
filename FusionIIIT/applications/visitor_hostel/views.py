@@ -16,14 +16,17 @@ def visitorhostel(request):
     context = {}
     bookaRoom = Book_room.objects.filter(status = "Pending")
     emptyRoom = Room_Status.objects.filter(status="Available")
-    form = ViewBooking()
+    allBookingForm = ViewBooking()
     cancelBooking = Book_room.objects.filter(status = "Confirm")
     book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
     room_status = Room_Status.objects.all().filter(status='Booked').distinct()
     room_status1 = []
+    print(room_status)
     for i in room_status:
-        if i.booking_from<=datetime.date.today():
-            room_status1.append(i.id)
+
+        if i.book_room.booking_from<=datetime.date.today():
+            room_status1.append(i.book_room)
+
     print(room_status1)
     checkIn=[]
     for x in room_status1:
@@ -34,8 +37,9 @@ def visitorhostel(request):
     book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
     context1 = []
     for i in room_status:
-        if i.booking_from<=datetime.date.today():
-            context1.append(i.id)
+
+        if i.book_room.booking_from<=datetime.date.today():
+            context1.append(i.book_room)
             # print('Room', room_status)
     print(context1)
     checkOut=[]
@@ -43,8 +47,8 @@ def visitorhostel(request):
         if x not in checkOut:
             checkOut.append(x)
     print(checkOut)
-    form=RoomAvailability()
-    form=Room_booking()
+    roomAvailabiltyForm=RoomAvailability()
+    bookaRoomForm=Room_booking()
     return render(request, "vhModule/visitorhostel.html", context)
 
 def vh_homepage(request):
@@ -54,24 +58,22 @@ def vh_homepage(request):
 @login_required(login_url='/accounts/login/')
 def booking_request(request):
     user = get_object_or_404(User, username=request.user.username)
-    c=ExtraInfo.objects.all().filter(user=user)
-    c=c[0]
-    st=str(c.designation)
-    print(st)
-    if st == 'Caretaker':
+
+    if user :
         if request.method == 'POST' :
             if 'confirm' in request.POST:
                 room_available = Room_Status.objects.filter(status="Available")
                 if not room_available:
                     messages.success(request, 'no room available')
                     return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-                br_id = request.POST.getlist('confirm')
-                br_id = br_id[0]
-                book = Book_room.objects.all().filter(br_id=br_id).first()
-                br_id = book.br_id
-                print('book room', br_id)
-                Book_room.objects.filter(br_id = br_id).update (status = "Confirm" )
-                book_room = Book_room.objects.get(br_id=br_id)
+                id = request.POST.getlist('confirm')
+                id = id[0]
+                book = Book_room.objects.all().filter(id=id).first()
+                print(book)
+                id = book.id
+                print('book room', id)
+                Book_room.objects.filter(id = id).update (status = "Confirm" )
+                book_room = Book_room.objects.get(id=id)
 
                 rooms=request.POST.getlist('room')
 
@@ -88,7 +90,7 @@ def booking_request(request):
                         p = p[0]
                         p.date = date_1
                         p.status = 'Booked'
-                        p.br_id = book
+                        p.book_room = book
                         p.save()
                     #return HttpResponse('okay')
                 messages.success(request, 'you allot room succesfully')
@@ -96,9 +98,9 @@ def booking_request(request):
 
             elif 'cancel' in request.POST:
                 print ("hello")
-                br_id = request.POST.getlist('cancel')
-                br_id = br_id[0]
-                Book_room.objects.filter(br_id = br_id).update (status = "Cancel" )
+                id = request.POST.getlist('cancel')
+                id = id[0]
+                Book_room.objects.filter(id = id).update (status = "Cancel" )
                 messages.success(request, 'succesfully cancelled')
                 return HttpResponseRedirect('/visitorhostel/vh_homepage/')
 
@@ -121,11 +123,8 @@ def booking_request(request):
 @login_required(login_url='/accounts/login/')
 def all_booking(request):
     user = get_object_or_404(User, username=request.user.username)
-    c=ExtraInfo.objects.all().filter(user=user)
-    c=c[0]
-    st=str(c.designation)
-    print(st)
-    if st == 'Caretaker':
+
+    if user:
         if request.method == 'POST' :
             print("hello")
             form = ViewBooking(request.POST)
@@ -150,17 +149,14 @@ def all_booking(request):
 @login_required(login_url='/accounts/login/')
 def cancel_booked_booking(request):
     user = get_object_or_404(User, username=request.user.username)
-    c=ExtraInfo.objects.all().filter(user=user)
-    c=c[0]
-    st=str(c.designation)
-    print(st)
-    if st == 'Caretaker':
+
+    if user:
         if request.method == 'POST' :
             print("yes")
-            br_id = request.POST.getlist('cancel')
-            br_id = br_id[0]
-            Book_room.objects.filter(br_id = br_id).update (status = "Cancel" )
-            Room_Status.objects.filter(br_id=br_id).update(status = "Available",br_id='')
+            id = request.POST.getlist('cancel')
+            id = id[0]
+            Book_room.objects.filter(id = id).update (status = "Cancel" )
+            Room_Status.objects.filter(id=id).update(status = "Available",id='')
             messages.success(request, 'cancelled successfully ')
             context = Book_room.objects.filter(status ="Confirm")
             return render(request, "vhModule/cancel_booked_room.html" , { 'context' : context})
@@ -178,23 +174,24 @@ def cancel_booked_booking(request):
 def check_in(request):
     user = get_object_or_404(User, username=request.user.username)
     c=ExtraInfo.objects.all().filter(user=user)
-    c=c[0]
-    st=str(c.designation)
-    print(st)
-    if st == 'Caretaker':
+
+    ####st=str(c.designation)
+    #print(st)
+    if user:
         if request.method =='POST' :
-            br_id=request.POST.getlist('checkedin')[0]
-            print(br_id)
+            id=request.POST.getlist('checkedin')
+            id=id[0]
+            #print(id)
             messages.success(request, 'check in succesfully')
-            Book_room.objects.all().filter(br_id=br_id).update(check_in=datetime.datetime.today())
-            Room_Status.objects.filter(br_id=br_id).update(status="CheckedIn")
+            Book_room.objects.all().filter(id=id).update(check_in=datetime.datetime.today())
+            Room_Status.objects.filter(book_room=id).update(status="CheckedIn")
             # code
             book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
             room_status = Room_Status.objects.all().filter(status='Booked')
             context1 = []
             for i in room_status:
-                if i.br_id.booking_from<=datetime.date.today():
-                    context1.append(i.br_id)
+                if i.book_room.booking_from<=datetime.date.today():
+                    context1.append(i.book_room)
             # print('Room', room_status)
             print(context1)
             context=[]
@@ -213,20 +210,20 @@ def check_in(request):
             room_status = Room_Status.objects.all().filter(status='Booked').distinct()
             context1 = []
             for i in room_status:
-                if i.br_id.booking_from<=datetime.date.today():
-                    context1.append(i.br_id)
+                if i.book_room.booking_from<=datetime.date.today():
+                    context1.append(i.book_room)
             # print('Room', room_status)
-            print(context1)
+            #print(context1)
             context=[]
             for x in context1:
                 if x not in context:
                     context.append(x)
-                # if i.br_id in b_room:
+                # if i.id in b_room:
                 #     r_status.append(i)
-            print(context)
+            #print(context)
 
             #return HttpResponse('okay')
-            #context = Book_room.objects.filter(br_id__in=Room_Status.objects.all().filter(status = "Booked"), booking_from__gte=datetime.datetime.today())
+            #context = Book_room.objects.filter(id__in=Room_Status.objects.all().filter(status = "Booked"), booking_from__gte=datetime.datetime.today())
             #print(context)
             if not context:
                 messages.success(request, 'No booking available')
@@ -240,28 +237,31 @@ def check_in(request):
 def check_out(request):
     user = get_object_or_404(User, username=request.user.username)
     c=ExtraInfo.objects.all().filter(user=user)
-    c=c[0]
-    st=str(c.designation)
-    print(st)
-    if st == 'Caretaker':
+
+    #####st=str(c.designation)
+    #print(st)
+    if user:
         if request.method =='POST' :
-            br_id=request.POST.getlist('checkout')[0]
-            book_room=Book_room.objects.all().filter(br_id=br_id)
+            id=request.POST.getlist('checkout')
+            print(id)
+            id=id[0]
+            book_room=id
+            book_room=Book_room.objects.all().filter(id=id)
             book_room=book_room[0]
-            Book_room.objects.all().filter(br_id=br_id).update(check_out=datetime.datetime.today())
-            print(book_room)
+            Book_room.objects.all().filter(id=id).update(check_out=datetime.datetime.today())
+            print(type(book_room),"booktoom1")
             days=(datetime.date.today() - book_room.check_in).days
-            v_id=book_room.visitor_id
+            v_id=book_room.visitor
             category=book_room.visitor_category
             person=book_room.person_count
             room_bill=0
 
-            book_room=Book_room.objects.all().filter(br_id=br_id)
+            book_room=Book_room.objects.filter(id=id)
             if category =='A':
                 room_bill=0
             elif category== 'B':
                 for i in book_room:
-                    room_status=Room_Status.objects.all().filter(br_id=i.br_id)
+                    room_status=Room_Status.objects.all().filter(book_room=i)
                     for i in room_status:
                         if i.room_id.room_type=='SingleBed':
                             room_bill=room_bill+days*400
@@ -269,7 +269,7 @@ def check_out(request):
                             room_bill=room_bill+days*500
             elif category=='C':
                 for i in book_room:
-                    room_status=Room_Status.objects.all().filter(br_id=i.br_id)
+                    room_status=Room_Status.objects.all().filter(book_room=i)
                     for i in room_status:
                         if i.room_id.room_type=='SingleBed':
                             room_bill=room_bill+days*800
@@ -277,7 +277,7 @@ def check_out(request):
                             room_bill=room_bill+days*1000
             else:
                 for i in book_room:
-                    room_status=Room_Status.objects.all().filter(br_id=i.br_id)
+                    room_status=Room_Status.objects.all().filter(book_room=i)
                     for i in room_status:
                         if i.room_id.room_type=='SingleBed':
                             room_bill=room_bill+days*1400
@@ -286,7 +286,7 @@ def check_out(request):
 
 
             mess_bill=0
-            meal=Meal.objects.all().filter(visitor_id=v_id).distinct()
+            meal=Meal.objects.all().filter(visitor=v_id).distinct()
             print(meal)
             for m in meal:
                 mess_bill1=0
@@ -306,10 +306,11 @@ def check_out(request):
                     mess_bill=mess_bill+225*m.persons
                 else:
                         mess_bill=mess_bill + mess_bill1
-            print(v_id)
-            Room_Status.objects.filter(br_id=br_id).update(status="Available",br_id='')
+            print(type(v_id))
+            print(book_room[0])
+            Room_Status.objects.filter(book_room=book_room[0]).update(status="Available",book_room='')
             total_bill=mess_bill + room_bill
-            context = {'v_id':v_id.visitor_id,'visitor':v_id.visitor_name,'mess_bill':mess_bill,'room_bill':room_bill, 't_bill':total_bill}
+            context = {'v_id':v_id,'visitor':v_id.visitor_name,'mess_bill':mess_bill,'room_bill':room_bill, 't_bill':total_bill}
             print(context)
             return render(request, "vhModule/payment1.html" , { 'context' : context})
 
@@ -319,8 +320,8 @@ def check_out(request):
             book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
             context1 = []
             for i in room_status:
-                if i.br_id.booking_from<=datetime.date.today():
-                    context1.append(i.br_id)
+                if i.book_room.booking_from<=datetime.date.today():
+                    context1.append(i.book_room)
             # print('Room', room_status)
             print(context1)
             context=[]
@@ -346,19 +347,19 @@ def check_out(request):
 def meal_book(request):
     user = get_object_or_404(User, username=request.user.username)
     c=ExtraInfo.objects.all().filter(user=user)
-    c=c[0]
-    st=str(c.designation)
-    print(st)
-    if st == 'Caretaker':
+
+    #####st=str(c.designation)
+    #print(st)
+    if user:
         if request.method == "POST":
             form=MealBooking(request.POST)
             if form.is_valid:
-                br_id=request.POST.getlist('visitor_id')
-                print(br_id)
-                br_id=br_id[0]
-                visitor=Visitor.objects.all().filter(visitor_id=br_id)
+                id=request.POST.getlist('visitor_id')
+                print(id)
+                id=id[0]
+                visitor=Visitor.objects.all().filter(visitor_id=id)
                 print(visitor)
-                br_id=visitor[0]
+                id=visitor[0]
                 date_1=request.POST.getlist('date')
                 if not date_1:
                     messages.success(request, 'No guest checked in currently')
@@ -402,7 +403,7 @@ def meal_book(request):
 
                 person=request.POST.getlist('persons')[0]
 
-                Meal.objects.create(visitor_id=br_id,morning_tea=m_tea,eve_tea=e_tea,meal_date=date_1,breakfast=breakfast,lunch=lunch,dinner=dinner,persons=person)
+                Meal.objects.create(visitor_id=id,morning_tea=m_tea,eve_tea=e_tea,meal_date=date_1,breakfast=breakfast,lunch=lunch,dinner=dinner,persons=person)
                 print("ok")
 
             messages.success(request, 'No guest checked in currently')
@@ -418,16 +419,14 @@ def meal_book(request):
 def bill_generation(request):
     user = get_object_or_404(User, username=request.user.username)
     c=ExtraInfo.objects.all().filter(user=user)
-    c=c[0]
-    st=str(c.designation)
-    print(st)
-    if st == 'Caretaker':
+
+    #####st=str(c.designation)
+    #print(st)
+    if user:
         if request.method == 'POST':
             v_id=request.POST.getlist('visitor')[0]
-            print(v_id)
-            v_id=Visitor.objects.filter(visitor_id=v_id)
-            print(v_id)
-            v_id=v_id[0]
+            print(v_id,"abc")
+
             meal_bill=request.POST.getlist('mess_bill')[0]
             room_bill=request.POST.getlist('room_bill')[0]
             status=request.POST.getlist('status')[0]
@@ -437,15 +436,17 @@ def bill_generation(request):
                 st=False
 
             user = get_object_or_404(User, username=request.user.username)
-            c=ExtraInfo.objects.all().filter(user=user)
-            c=c[0]
-            visitor_bill=Visitor_bill.objects.create(visitor_id=v_id,caretaker_id=user,meal_bill=meal_bill, room_bill=room_bill,payment_status=st)
+            c=ExtraInfo.objects.filter(user=user)
+            visitor=Visitor.objects.filter(id=v_id)
+            print(visitor,"asd")
+            visitor=visitor[0]
+            visitor_bill=Visitor_bill.objects.create(visitor=visitor,caretaker_id=user,meal_bill=meal_bill, room_bill=room_bill,payment_status=st)
             messages.success(request, 'guest check out successfully')
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
 
         else:
-            messages.success(request, 'No user selected')
-            return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+            #messages.success(request, 'No user selected')
+            return HttpResponseRedirect('/visitorhostel/')
 
 
 @login_required(login_url='/accounts/login/')
@@ -464,16 +465,16 @@ def Room_availabity(request):
                     b=Room.objects.filter(room_id=i.room_id.room_id)
                     context.append(b)
 
-                br_id=Book_room.objects.all().filter(booking_from__gte=date_2)
-                for i in br_id:
-                    room_status=Room_Status.objects.all().filter(br_id=i.br_id)
+                id=Book_room.objects.all().filter(booking_from__gte=date_2)
+                for i in id:
+                    room_status=Room_Status.objects.all().filter(id=i.id)
                     for i in room_status:
                         b=Room.objects.filter(room_id=i.room_id.room_id)
                         context.append(b)
 
-                br_id=Book_room.objects.all().filter(booking_to__lte=date_1)
-                for i in br_id:
-                    room_status=Room_Status.objects.all().filter(br_id=i.br_id)
+                id=Book_room.objects.all().filter(booking_to__lte=date_1)
+                for i in id:
+                    room_status=Room_Status.objects.all().filter(id=i.id)
                     for i in room_status:
                         b=Room.objects.filter(room_id=i.room_id.room_id)
                         context.append(b)
@@ -482,6 +483,7 @@ def Room_availabity(request):
 
         else:
             form=RoomAvailability()
+            print(form)
             return render(request,"vhModule/checkavailability1.html",{'form':form})
 
 
@@ -497,13 +499,22 @@ def BookaRoom(request):
             email=request.POST.getlist('email')[0]
             address=request.POST.getlist('address')[0]
             country=request.POST.getlist('country')[0]
-            visitor=Visitor.objects.create(intender_id=user,visitor_name=name,visitor_email=email,visitor_phone=mob,visitor_address=address,nationality=country)
-            persons=request.POST.getlist('total_person')[0]
+            visitor=Visitor.objects.create(intender_id=user,
+                                           visitor_name=name,
+                                           visitor_email=email,
+                                           visitor_phone=mob,
+                                           visitor_address=address,
+                                           nationality=country)
+            persons=request.POST.getlist('total_persons')[0]
             category=request.POST.getlist('category')[0]
             purpose=request.POST.getlist('purpose')[0]
             date_1=request.POST.getlist('date_from')[0]
             date_2=request.POST.getlist('date_to')[0]
-            book_room=Book_room.objects.create(visitor_id=visitor,visitor_category=category,purpose=purpose,Booking_to=date_2,booking_from=date_1)
+            book_room=Book_room.objects.create(visitor=visitor,
+                                               visitor_category=category,
+                                               purpose=purpose,
+                                               booking_to=date_2,
+                                               booking_from=date_1)
             messages.success(request, 'submit successfully')
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
         else:
