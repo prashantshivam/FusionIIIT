@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.http import HttpResponseRedirect
 from applications.visitor_hostel.models import *
+from applications.visitor_hostel.forms import *
 from datetime import date
 import datetime
 from django.contrib import messages
@@ -378,7 +379,7 @@ def meal_book(request):
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
 
         else:
-            form=MealBooking
+            form=MealBooking()
             return render(request, "vhModule/bookingmea1.html",{'form':form})
 
 
