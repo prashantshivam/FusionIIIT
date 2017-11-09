@@ -14,42 +14,51 @@ from django.contrib.auth import logout
 def visitorhostel(request):
 
     context = {}
-    bookaRoom = Book_room.objects.filter(status = "Pending")
+    bookRoom = Book_room.objects.filter(status = "Pending")
     emptyRoom = Room_Status.objects.filter(status="Available")
+
+    
     allBookingForm = ViewBooking()
-    cancelBooking = Book_room.objects.filter(status = "Confirm")
+
+    cancelBookingForm = Book_room.objects.filter(status = "Confirm")
+
     book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
     room_status = Room_Status.objects.all().filter(status='Booked').distinct()
     room_status1 = []
     print(room_status)
     for i in room_status:
-
         if i.book_room.booking_from<=datetime.date.today():
             room_status1.append(i.book_room)
-
     print(room_status1)
-    checkIn=[]
+    checkInForm=[]
     for x in room_status1:
-        if x not in checkIn:
-            checkIn.append(x)
-    print(checkIn)
+        if x not in checkInForm:
+            checkInForm.append(x)
+    print(checkInForm)
+
+
     room_status=Room_Status.objects.filter(status = "CheckedIn")
     book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
     context1 = []
     for i in room_status:
-
         if i.book_room.booking_from<=datetime.date.today():
             context1.append(i.book_room)
             # print('Room', room_status)
     print(context1)
-    checkOut=[]
+    checkOutForm=[]
     for x in context1:
-        if x not in checkOut:
-            checkOut.append(x)
-    print(checkOut)
+        if x not in checkOutForm:
+            checkOutForm.append(x)
+    print(checkOutForm)
+
     roomAvailabiltyForm=RoomAvailability()
+
     bookaRoomForm=Room_booking()
-    return render(request, "vhModule/visitorhostel.html", context)
+
+    edit_room_statusForm=Room_Status.objects.filter(Q(status="UnderMaintenance") | Q(status="Available"))
+
+    return render(request, "vhModule/visitorhostel.html", {'bookRoom' : bookRoom, 'emptyRoom' :emptyRoom ,'allBookingForm' :allBookingForm , 'cancelBookingForm':cancelBookingForm , 'checkInForm' :checkInForm ,'checkOutForm' :checkOutForm ,'roomAvailabiltyForm' :roomAvailabiltyForm , 'bookaRoomForm' :bookaRoomForm ,'edit_room_statusForm' :edit_room_statusForm})
+
 
 def vh_homepage(request):
     context = {}
@@ -107,13 +116,14 @@ def booking_request(request):
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
 
         else :
-            context = Book_room.objects.filter(status = "Pending")
-            room = Room_Status.objects.filter(status="Available")
-            print("hello")
-            if not context:
-                messages.success(request, 'No new request')
-                return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-            return render(request, "vhModule/vh_view_booking_request.html" ,{ 'context' : context , 'room' : room })
+            #context = Book_room.objects.filter(status = "Pending")
+            #room = Room_Status.objects.filter(status="Available")
+            #print("hello")
+            #if not context:
+                #messages.success(request, 'No new request')
+                #return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+            #return render(request, "vhModule/vh_view_booking_request.html" ,{ 'context' : context , 'room' : room })
+            return HttpResponseRedirect('/visitorhostel/')
 
     else :
         messages.success(request, 'permission denied')
@@ -140,10 +150,10 @@ def all_booking(request):
                     return render(request, "vhModule/show_all_booking.html" , {'booking' : booking})
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
         else :
-            print("hii")
-            form = ViewBooking()
-            return render(request, "vhModule/input_booking_date.html" , { 'form' : form})
-
+            #print("hii")
+            #form = ViewBooking()
+            #return render(request, "vhModule/input_booking_date.html" , { 'form' : form})
+            return HttpResponseRedirect('/visitorhostel/')
 
 
 @login_required(login_url='/accounts/login/')
@@ -161,13 +171,13 @@ def cancel_booked_booking(request):
             context = Book_room.objects.filter(status ="Confirm")
             return render(request, "vhModule/cancel_booked_room.html" , { 'context' : context})
         else :
-            context = Book_room.objects.filter(status = "Confirm",booking_from__gte=datetime.datetime.today())
-            print(context)
-            if not context:
-                messages.success(request, 'No confirm booking available')
-                return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-            return render(request, "vhModule/cancel_booked_room.html" , { 'context' : context})
-
+            #context = Book_room.objects.filter(status = "Confirm",booking_from__gte=datetime.datetime.today())
+            #print(context)
+            #if not context:
+                #messages.success(request, 'No confirm booking available')
+                #return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+            #return render(request, "vhModule/cancel_booked_room.html" , { 'context' : context})
+            return HttpResponseRedirect('/visitorhostel/')
 
 
 @login_required(login_url='/accounts/login/')
@@ -206,29 +216,31 @@ def check_in(request):
             return render(request, "vhModule/checkin1.html" , { 'context' : context})
 
         else :
-            book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
-            room_status = Room_Status.objects.all().filter(status='Booked').distinct()
-            context1 = []
-            for i in room_status:
-                if i.book_room.booking_from<=datetime.date.today():
-                    context1.append(i.book_room)
-            # print('Room', room_status)
-            #print(context1)
-            context=[]
-            for x in context1:
-                if x not in context:
-                    context.append(x)
-                # if i.id in b_room:
-                #     r_status.append(i)
+            #book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
+            #room_status = Room_Status.objects.all().filter(status='Booked').distinct()
+            #context1 = []
+            #for i in room_status:
+                #if i.book_room.booking_from<=datetime.date.today():
+                    #context1.append(i.book_room)
+            ## print('Room', room_status)
+            ##print(context1)
+            #context=[]
+            #for x in context1:
+                #if x not in context:
+                    #context.append(x)
+                # #if i.id in b_room:
+                # #    r_status.append(i)
             #print(context)
 
             #return HttpResponse('okay')
             #context = Book_room.objects.filter(id__in=Room_Status.objects.all().filter(status = "Booked"), booking_from__gte=datetime.datetime.today())
             #print(context)
-            if not context:
-                messages.success(request, 'No booking available')
-                return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-            return render(request, "vhModule/checkin1.html" , { 'context' : context})
+            #if not context:
+                #messages.success(request, 'No booking available')
+                #return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+            #return render(request, "vhModule/checkin1.html" , { 'context' : context})
+            return HttpResponseRedirect('/visitorhostel/')
+
 
 
 
@@ -316,24 +328,24 @@ def check_out(request):
 
 
         else :
-            room_status=Room_Status.objects.filter(status = "CheckedIn")
-            book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
-            context1 = []
-            for i in room_status:
-                if i.book_room.booking_from<=datetime.date.today():
-                    context1.append(i.book_room)
-            # print('Room', room_status)
-            print(context1)
-            context=[]
-            for x in context1:
-                if x not in context:
-                    context.append(x)
-            print(context)
-            if not context:
-                messages.success(request, 'No guest checked in currently')
-                return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-            return render(request, "vhModule/checkout1.html" , { 'context' : context})
-
+            #room_status=Room_Status.objects.filter(status = "CheckedIn")
+            #book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
+            #context1 = []
+            #for i in room_status:
+                #if i.book_room.booking_from<=datetime.date.today():
+                    #context1.append(i.book_room)
+            ## print('Room', room_status)
+            #print(context1)
+            #context=[]
+            #for x in context1:
+                #if x not in context:
+                    #context.append(x)
+            #print(context)
+            #if not context:
+                #messages.success(request, 'No guest checked in currently')
+                #return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+            #return render(request, "vhModule/checkout1.html" , { 'context' : context})
+            return HttpResponseRedirect('/visitorhostel/')
 
 
 
@@ -354,10 +366,9 @@ def meal_book(request):
         if request.method == "POST":
             form=MealBooking(request.POST)
             if form.is_valid:
-                id=request.POST.getlist('visitor_id')
-                print(id)
+                id=request.POST.getlist('visitor')
                 id=id[0]
-                visitor=Visitor.objects.all().filter(visitor_id=id)
+                visitor=Visitor.objects.all().filter(id=id)
                 print(visitor)
                 id=visitor[0]
                 date_1=request.POST.getlist('date')
@@ -403,16 +414,16 @@ def meal_book(request):
 
                 person=request.POST.getlist('persons')[0]
 
-                Meal.objects.create(visitor_id=id,morning_tea=m_tea,eve_tea=e_tea,meal_date=date_1,breakfast=breakfast,lunch=lunch,dinner=dinner,persons=person)
+                Meal.objects.create(visitor=id,morning_tea=m_tea,eve_tea=e_tea,meal_date=date_1,breakfast=breakfast,lunch=lunch,dinner=dinner,persons=person)
                 print("ok")
 
             messages.success(request, 'No guest checked in currently')
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
 
         else:
-            form=MealBooking()
-            return render(request, "vhModule/bookingmea1.html",{'form':form})
-
+            #form=MealBooking()
+            #return render(request, "vhModule/bookingmea1.html",{'form':form})
+            return HttpResponseRedirect('/visitorhostel/')
 
 
 @login_required(login_url='/accounts/login/')
@@ -437,10 +448,10 @@ def bill_generation(request):
 
             user = get_object_or_404(User, username=request.user.username)
             c=ExtraInfo.objects.filter(user=user)
-            visitor=Visitor.objects.filter(id=v_id)
+            visitor=Visitor.objects.filter(visitor_phone=v_id)
             print(visitor,"asd")
             visitor=visitor[0]
-            visitor_bill=Visitor_bill.objects.create(visitor=visitor,caretaker_id=user,meal_bill=meal_bill, room_bill=room_bill,payment_status=st)
+            visitor_bill=Visitor_bill.objects.create(visitor=visitor,caretaker=user,meal_bill=meal_bill, room_bill=room_bill,payment_status=st)
             messages.success(request, 'guest check out successfully')
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
 
@@ -482,10 +493,11 @@ def Room_availabity(request):
                 return render(request,"vhModule/checkavailabilty11.html",{'context':context})
 
         else:
-            form=RoomAvailability()
-            print(form)
-            return render(request,"vhModule/checkavailability1.html",{'form':form})
-
+            #form=RoomAvailability()
+            #print(form)
+            #return render(request,"vhModule/checkavailability1.html",{'form':form})
+            return HttpResponseRedirect('/visitorhostel/')
+            
 
 @login_required(login_url='/accounts/login/')
 def BookaRoom(request):
@@ -499,7 +511,7 @@ def BookaRoom(request):
             email=request.POST.getlist('email')[0]
             address=request.POST.getlist('address')[0]
             country=request.POST.getlist('country')[0]
-            visitor=Visitor.objects.create(intender_id=user,
+            visitor=Visitor.objects.create(intender=user,
                                            visitor_name=name,
                                            visitor_email=email,
                                            visitor_phone=mob,
@@ -518,13 +530,23 @@ def BookaRoom(request):
             messages.success(request, 'submit successfully')
             return HttpResponseRedirect('/visitorhostel/vh_homepage/')
         else:
-            form=Room_booking()
-            return render(request,"vhModule/bookaroom1.html",{'form':form})
-
+            #form=Room_booking()
+            #return render(request,"vhModule/bookaroom1.html",{'form':form})
+            return HttpResponseRedirect('/visitorhostel/')
 
 def add_to_inventory(request):
-    return
+    return HttpResponseRedirect('/visitorhostel/')
 
 
 def edit_room_status(request):
-    return
+    if request.method == 'POST':
+        room=request.POST.getlist('change')[0]
+        room=Room.objects.filter(room_number=room)[0]
+        print(type(room))
+        Room_Status.objects.filter(room_id=room).update(status="UnderMaintenance")
+        return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+    else:
+        #edit_room_status=Room_Status.objects.filter(Q(status="UnderMaintenance") | Q(status="Available"))
+        #print(edit_room_status)
+        #return render(request,"vhModule/edit_room_status1.html",{'context':edit_room_status})
+        return HttpResponseRedirect('/visitorhostel/')
