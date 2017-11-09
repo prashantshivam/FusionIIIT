@@ -24,38 +24,40 @@
                 </thead>
 
                 <tbody>
+                {% for booking in confirmed_bookings %}
                 <tr>
                     <td>
                         <h4 class="ui image header">
                             <div class="content">
-                                Zlatan Ibrahimovic
+                                {{ booking.visitor.visitor_name }}
                                 <div class="sub header">
-                                    gmail@zlatan.com
+                                    {{ booking.visitor.visitor_email }}
                                 </div>
                             </div>
                         </h4>
                     </td>
 
                     <td>
-                        Zlatan
+                        {{ booking.visitor.intender.user_name }}
                     </td>
 
                     <td>
-                        14 Nov'17
+                        {{ booking.booking_from }}
                     </td>
 
                     <td>
-                        16 Nov'17
+                        {{ booking.booking_to }}
                     </td>
 
                     <td>
-                        2
+
                     </td>
 
                     <td>
-                        <i class="large green checkmark icon"></i>
+
                     </td>
                 </tr>
+                {% endfor %}
                 </tbody>
             </table>
             <br>

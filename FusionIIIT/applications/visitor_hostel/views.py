@@ -14,16 +14,23 @@ from django.contrib.auth import logout
 def visitorhostel(request):
 
     context = {}
-    bookRoom = Book_room.objects.filter(status = "Pending")
-    emptyRoom = Room_Status.objects.filter(status="Available")
+    # bookings here
+    confirmed_bookings = Book_room.objects.filter(status = "Confirm")
+    pending_bookings = Book_room.objects.filter(status = "Pending")
+    cancelled_bookings = Book_room.objects.filter(status = "Cancel")
 
-    
+    # rooms info here
+    available_rooms = Room_Status.objects.filter(status="Available")
+    booked_rooms = Room_Status.objects.filter(status = 'Booked')
+    under_maintainence_rooms = Room_Status.objects.filter(status = 'UnderMaintenance')
+    occupied_rooms = Room_Status.objects.filter(status = 'CheckedIn')
+
     allBookingForm = ViewBooking()
 
     cancelBookingForm = Book_room.objects.filter(status = "Confirm")
 
-    book_room = Book_room.objects.all().filter(booking_from__lte=datetime.datetime.today())
-    room_status = Room_Status.objects.all().filter(status='Booked').distinct()
+    book_room = Book_room.objects.filter(booking_from__lte=datetime.datetime.today())
+    room_status = Room_Status.objects.filter(status='Booked').distinct()
     room_status1 = []
     print(room_status)
     for i in room_status:
@@ -57,7 +64,17 @@ def visitorhostel(request):
 
     edit_room_statusForm=Room_Status.objects.filter(Q(status="UnderMaintenance") | Q(status="Available"))
 
-    return render(request, "vhModule/visitorhostel.html", {'bookRoom' : bookRoom, 'emptyRoom' :emptyRoom ,'allBookingForm' :allBookingForm , 'cancelBookingForm':cancelBookingForm , 'checkInForm' :checkInForm ,'checkOutForm' :checkOutForm ,'roomAvailabiltyForm' :roomAvailabiltyForm , 'bookaRoomForm' :bookaRoomForm ,'edit_room_statusForm' :edit_room_statusForm})
+    return render(request, "vhModule/visitorhostel.html",
+                  {'confirmed_bookings' : confirmed_bookings,
+                   'pending_bookings' : pending_bookings,
+                   'available_rooms' :available_rooms,
+                   'allBookingForm' :allBookingForm,
+                   'cancelBookingForm':cancelBookingForm,
+                   'checkInForm' :checkInForm,
+                   'checkOutForm' :checkOutForm,
+                   'roomAvailabiltyForm' :roomAvailabiltyForm,
+                   'bookaRoomForm' :bookaRoomForm,
+                   'edit_room_statusForm' :edit_room_statusForm})
 
 
 def vh_homepage(request):
@@ -127,7 +144,7 @@ def booking_request(request):
 
     else :
         messages.success(request, 'permission denied')
-        return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+        return HttpResponseRedirect('/visitorhostel/')
 
 
 @login_required(login_url='/accounts/login/')
@@ -497,7 +514,7 @@ def Room_availabity(request):
             #print(form)
             #return render(request,"vhModule/checkavailability1.html",{'form':form})
             return HttpResponseRedirect('/visitorhostel/')
-            
+
 
 @login_required(login_url='/accounts/login/')
 def BookaRoom(request):
