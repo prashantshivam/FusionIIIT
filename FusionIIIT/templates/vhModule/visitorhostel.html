@@ -183,7 +183,6 @@
         <div class="column"></div>
 
     </div>
-
 {% endblock %}
 
 
@@ -245,7 +244,7 @@
         $('#edit-room-status').click(function(event){
             var boxes = $('.editable').length;
             for( var i=0; i<boxes; i++){
-                $('.editable')[i].innerHTML = '<div class="ui checkbox"><input name="example" type="checkbox"><label></label></div>';
+                $('.editable')[i].innerHTML = '';
             }
             $('#room-status-submit')[0].style.display = 'block';
         });
@@ -271,4 +270,47 @@
         });
     </script>
     <!-- Room status Js ends -->
+
+    <!-- Booking Requests Js-->
+<!--     <script type="text/javascript">
+        $('check').addEventListener('change',function(event){
+            var checked = $(':checked')[0];
+            console.log(checked.parentElement.parentElement.parentElement.style.display);
+        });
+    </script> -->
+    <!-- Booking Request Js Ends -->
+
+    <!-- Book A Room Js -->
+    <script type="text/javascript">
+        $('#booking-form-submit').click(function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/visitorhostel/bookaroom/',
+                data: {
+                    'csrfmiddlewaretoken': '{{csrf_token}}',
+                    'name' : $('input[name="name"]').val(),
+                    'organisation' : $('input[name="organisation"]').val(),
+                    'phone' : $('input[name="phone"]').val(),
+                    'email' : $('input[name="email"]').val(),
+                    'address' : $('textarea[name="address"]').val(),
+                    'category' : $('input[name="category"]').val(),
+                    'country' : $('input[name="country"]').val(),
+                    'numberofpeople' : $('input[name="numberofpeople"]').val(),
+                    'numberofrooms' : $('input[name="numberofrooms"]').val(),
+                    'purposeofvisit' : $('textarea[name="purposeofvisit"]').val(),
+                    'booking_from' : $('input[name="booking_from"]').val(),
+                    'booking_to' : $('input[name="booking_to"]').val()
+                },
+                success: function(data) {
+                    alert("Success");
+                    $('#bookaroom-form')[0].reset();
+                },
+                error: function(data, err) {
+                    alert(err.message);
+                }
+            });
+        });
+    </script>
+    <!-- Ends -->
 {% endblock %}

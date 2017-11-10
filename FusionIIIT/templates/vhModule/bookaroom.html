@@ -11,7 +11,7 @@
              style="padding-left: 3.5%;
                 padding-right: 3.5%;">
 
-            <form class="ui large form">
+            <form class="ui large form" id="bookaroom-form">
 
                 {% comment %} The visitor room form  starts here! {% endcomment %}
                 <div id="bookaroom">
@@ -22,12 +22,12 @@
                             <div class="field">
                                 <label>Name </label>
 
-                                <input value="" type="text">
+                                <input name="name" type="text" placeholder="Name">
                             </div>
 
                             <div class="field">
-                                <label>Organization</label>
-                                <input placeholder="Organization" type="text">
+                                <label>Organisation</label>
+                                <input placeholder="Organisation" type="text" name="organisation">
                             </div>
                         </div>
                     </div>
@@ -36,20 +36,44 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>Phone </label>
-                                <input placeholder="Phone" type="number">
+                                <input placeholder="Phone" type="number" name="phone">
                             </div>
 
                             <div class="field">
                                 <label>Email</label>
-                                <input placeholder="Email" type="Email">
+                                <input placeholder="Email" type="Email" name="email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Booking From</label>
+                                <div class="ui calendar">
+                                    <div class="ui input left icon">
+                                        <i class="calendar icon"></i>
+                                        <input type="text" placeholder="Pick a date" name="booking_from">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label>Booking To</label>
+                                <div class="ui calendar">
+                                    <div class="ui input left icon">
+                                        <i class="calendar icon"></i>
+                                        <input type="text" placeholder="Pick a date" name="booking_to">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="sixteen wide field">
-                        <label>Address:</label>
+                        <label>Address</label>
                         <div class="ui fluid input">
-                            <textarea class="ui textarea" rows="2"></textarea>
+                            <textarea class="ui textarea" rows="2" name="address"></textarea>
                         </div>
                     </div>
 
@@ -60,7 +84,7 @@
                                 <label>Category:</label>
 
                                 <div class="ui fluid search selection dropdown">
-                                    <input name="" type="hidden">
+                                    <input name="category" type="hidden">
                                     <i class="dropdown icon"></i>
 
                                     <div class="default text">Select</div>
@@ -88,86 +112,38 @@
                             <div class="field">
                                 <label>Country</label>
                                 <div class="ui fluid input">
-                                    <input name="country" value="">
+                                    <input name="country" name="country">
                                 </div>
                             </div>
 
                             <div class="field">
                                 <label>Number Of People </label>
 
-                                <div class="ui fluid search selection dropdown">
-                                    <input name="noOfPeople" type="hidden">
-                                    <i class="dropdown icon"></i>
-
-                                    <div class="default text">Select</div>
-
-                                    <div class="menu">
-                                        <div class="item" data-value="1">
-                                            1
-                                        </div>
-
-                                        <div class="item" data-value="B">
-                                            2
-                                        </div>
-
-                                        <div class="item" data-value="C">
-                                            3
-                                        </div>
-
-                                        {% comment %}
-                                    Do it using a for loop in Python -->
-                                    {% for i in range(10) %}-->
-
-                                    <div class="item" data-value="C">
-                                        {{i}}
-                                    </div>
-
-                                    {% endfor %}
-                                    {% endcomment %}
-
-                                    </div>
+                                <div class="ui fluid input">
+                                    <input name="numberofpeople" type="number">
                                 </div>
                             </div>
 
                             <div class="field">
-                                <label>No Of Rooms:</label>
-                                <div class="ui fluid search selection dropdown">
-                                    <input name="Select" type="hidden">
-                                    <i class="dropdown icon"></i>
-
-                                    <div class="default text">Select</div>
-
-                                    <div class="menu">
-                                        <div class="item" data-value="1">
-                                            1
-                                        </div>
-
-                                        <div class="item" data-value="2">
-                                            2
-                                        </div>
-                                        <div class="item" data-value="3">
-                                            3
-                                        </div>
-
-                                        <div class="item" data-value="4">
-                                            4
-                                        </div>
-                                    </div>
+                                <label>Number Of Rooms</label>
+                                <div class="ui fluid input">
+                                    <input name="numberofrooms" type="number">
                                 </div>
-
                             </div>
                         </div>
                     </div>
 
                     <div class="field">
                         <label>Purpose Of Visit</label>
-                        <textarea rows="2"></textarea>
+                        <div class="ui fluid input">
+                            <textarea rows="2" name="purposeofvisit"></textarea>
+                        </div>
                     </div>
 
                 </div>
                 <div class="field">
                     <label><br></label>
-                    <div class="ui large primary button right floated">
+                    <div class="ui large primary button right floated" id="booking-form-submit">
                         Submit
                     </div>
                 </div>

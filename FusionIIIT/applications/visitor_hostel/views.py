@@ -20,10 +20,17 @@ def visitorhostel(request):
     cancelled_bookings = Book_room.objects.filter(status = "Cancel")
 
     # rooms info here
+    all_rooms_status = Room_Status.objects.all()
     available_rooms = Room_Status.objects.filter(status="Available")
     booked_rooms = Room_Status.objects.filter(status = 'Booked')
     under_maintainence_rooms = Room_Status.objects.filter(status = 'UnderMaintenance')
     occupied_rooms = Room_Status.objects.filter(status = 'CheckedIn')
+
+    # inventory data
+    inventory = Inventory.objects.all()
+
+    # rooms booked for a visitor
+    # rooms_booked = Visitor_room.objects.filter()
 
     allBookingForm = ViewBooking()
 
@@ -67,7 +74,13 @@ def visitorhostel(request):
     return render(request, "vhModule/visitorhostel.html",
                   {'confirmed_bookings' : confirmed_bookings,
                    'pending_bookings' : pending_bookings,
+                   'cancelled_bookings' : cancelled_bookings,
+                   'all_rooms_status' : all_rooms_status,
                    'available_rooms' :available_rooms,
+                   'booked_rooms' : booked_rooms,
+                   'under_maintainence_rooms' : under_maintainence_rooms,
+                   'occupied_rooms' : occupied_rooms,
+                   'inventory' : inventory,
                    'allBookingForm' :allBookingForm,
                    'cancelBookingForm':cancelBookingForm,
                    'checkInForm' :checkInForm,
@@ -94,7 +107,7 @@ def booking_request(request):
                     return HttpResponseRedirect('/visitorhostel/vh_homepage/')
                 id = request.POST.getlist('confirm')
                 id = id[0]
-                book = Book_room.objects.all().filter(id=id).first()
+                book = Book_room.objects.filter(id=id).first()
                 print(book)
                 id = book.id
                 print('book room', id)
@@ -524,7 +537,7 @@ def BookaRoom(request):
         if request.method=='POST':
             print("book a room")
             name=request.POST.getlist('name')[0]
-            mob=request.POST.getlist('mob')[0]
+            mob=request.POST.getlist('phone')[0]
             email=request.POST.getlist('email')[0]
             address=request.POST.getlist('address')[0]
             country=request.POST.getlist('country')[0]
@@ -534,11 +547,11 @@ def BookaRoom(request):
                                            visitor_phone=mob,
                                            visitor_address=address,
                                            nationality=country)
-            persons=request.POST.getlist('total_persons')[0]
+            persons=request.POST.getlist('numberofpeople')[0]
             category=request.POST.getlist('category')[0]
-            purpose=request.POST.getlist('purpose')[0]
-            date_1=request.POST.getlist('date_from')[0]
-            date_2=request.POST.getlist('date_to')[0]
+            purpose=request.POST.getlist('purposeofvisit')[0]
+            date_1=request.POST.getlist('booking_from')[0]
+            date_2=request.POST.getlist('booking_to')[0]
             book_room=Book_room.objects.create(visitor=visitor,
                                                visitor_category=category,
                                                purpose=purpose,
@@ -549,6 +562,7 @@ def BookaRoom(request):
         else:
             #form=Room_booking()
             #return render(request,"vhModule/bookaroom1.html",{'form':form})
+            print("maa chuda")
             return HttpResponseRedirect('/visitorhostel/')
 
 def add_to_inventory(request):

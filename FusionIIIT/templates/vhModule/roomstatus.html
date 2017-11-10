@@ -17,37 +17,25 @@
 
                     <th rowspan="2">Room Number</th>
                     <th rowspan="2">Floor</th>
-                    <th colspan="4"><center>Room Status</center></th>
+                    <th rowspan="4"><center>Room Status</center></th>
 
-                </tr>
-
-                <tr>
-                    <th class="three wide">Available</th>
-                    <th class="two wide">Booked</th>
-                    <th class="three wide">Occupied</th>
-                    <th class="three wide">Under Maintainence</th>
                 </tr>
                 </thead>
 
                 <tbody>
-
-                <tr>
-                    <td>
-                        AR - 0898
-                    </td>
-                    <td>
-                        First
-                    </td>
-                    <td class="editable">
-                        <i class="large green checkmark icon"></i>
-                    </td>
-                    <td class="editable">
-                    </td>
-                    <td class="editable">
-                    </td>
-                    <td class="editable">
-                    </td>
-                </tr>
+                    {% for instance in all_rooms_status %}
+                    <tr>
+                        <td>
+                            {{ instance.room }}
+                        </td>
+                        <td>
+                            {{ instance.room.room_floor }}
+                        </td>
+                        <td class="editable">
+                            {{ instance.status }}
+                        </td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
 

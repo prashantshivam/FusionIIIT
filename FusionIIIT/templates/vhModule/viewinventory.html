@@ -19,44 +19,39 @@
                 <tr>
                     <th>Bill-No.</th>
                     <th>Item</th>
-                    <th>Type</th>
                     <th>Quantity</th>
-                    <th>Amount</th>
-                    <th>Bill</th>
+                    <th>Cost</th>
+                    <th>Consumable</th>
                 </tr>
                 </thead>
 
                 <tbody>
+                    {% for item in inventory %}
+                    <tr>
+                        <td>
+                            {{item.bill_number }}
+                        </td>
 
-                <tr>
-                    <td>
-                        XXXX-XXXX-XXXX-XXXX
-                    </td>
+                        <td>
+                            {{ item.item_name }}
+                        </td>
 
-                    <td>
-                        Item #1
-                    </td>
+                        <td>
+                            {{ item.quantity }}
+                        </td>
 
-                    <td>
-                        Consumable
-                    </td>
+                        <td>
+                            {{ item.cost }}
+                        </td>
 
-                    <td>
-                        Qty #1
-                    </td>
+                        <td>
+                            {% if item.consumable == "True" %}
+                            true
+                            {% endif %}
+                        </td>
 
-                    <td>
-                        Amt #1
-                    </td>
-
-                    <td>
-                        <div class="ui inverted circular icon button" style="margin: auto;">
-                            <i class="wrench black icon"></i>
-                        </div>
-                    </td>
-
-                </tr>
-
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
 

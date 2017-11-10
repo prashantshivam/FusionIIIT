@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from applications.globals.models import ExtraInfo
 
 
 VISITOR_CATEGORY = (
@@ -97,6 +98,10 @@ class Meal(models.Model):
 
 class Inventory(models.Model):
     item_name = models.CharField(max_length=20)
+    bill_number = models.CharField(max_length=40)
+    quantity = models.IntegerField(default=0)
+    cost = models.IntegerField(default=0)
+    consumable = models.BooleanField(default=False)
     opening_stock = models.IntegerField(default=0)
     addition_stock = models.IntegerField(default=0)
     total_stock = models.IntegerField(default=0)
@@ -108,8 +113,9 @@ class Inventory(models.Model):
 
 class Room_Status(models.Model):
     date = models.DateField(null=True, blank=True)
-    room_id = models.OneToOneField(Room, on_delete=models.CASCADE)
+    room = models.OneToOneField(Room, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=ROOM_STATUS, default = "Available")
     book_room = models.ForeignKey(Book_room , on_delete =models.CASCADE,unique=False, null=True, blank=True)
+
     def __str__(self):
         return str(self.room_id)
