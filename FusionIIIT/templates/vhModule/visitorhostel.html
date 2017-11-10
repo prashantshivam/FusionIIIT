@@ -194,11 +194,36 @@
 
     <!-- Book a Meal Js -->
     <script type="text/javascript">
-        $('#bookameal-date-submit').click(function(event){
+        $('.bookameal-submit').click(function(event){
             event.preventDefault();
-            if($('.table-display-unit')[0].style.display == 'none'){
-                $('.table-display-unit')[0].style.display = 'block';
-            }
+            var pk = $(this).attr('data-pk');
+            var food = []
+            $('input[name=food'+pk+']:checked').each(function(){
+                food.push($(this).val());
+            });
+            alert(food);
+            alert(pk);
+            $.ajax({
+                type: 'POST',
+                url: '/visitorhostel/bookmeal/',
+                data: {
+                    // 'visitor' : $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value,
+                    // 'quantity' : $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value,
+                    // 'amount' : $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value,
+                    // 'consumable' : $('.reset-this-form')[0].children[2].children[3].children[1].children[0].value,
+                    'food':food,
+
+                    'csrfmiddlewaretoken': '{{csrf_token}}'
+                },
+                success: function(data) {
+                    $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value = "";
+                    $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value = "";
+                    $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value = "";
+                },
+                error: function(data, err) {
+                    alert(err.message);
+                }
+            });
         });
     </script>
     <!-- Book a Meal Js Ends -->
@@ -229,6 +254,29 @@
                     $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value = "";
                     $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value = "";
                     $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value = "";
+                },
+                error: function(data, err) {
+                    alert(err.message);
+                }
+            });
+
+        });
+
+        $('#add-item-form-submit').click(function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/visitorhostel/bookaroom/',
+                data: {
+                    'csrfmiddlewaretoken': '{{csrf_token}}',
+                    'item_name' : $('input[name="item-name"]').val(),
+                    'quantity' : $('input[name="quantity"]').val(),
+                    'amount' : $('input[name="amount"]').val(),
+                    'consumable' : $('input[name="consumable"]').val(),
+                },
+                success: function(data) {
+                    alert("Success");
+                    $('#bookaroom-form')[0].reset();
                 },
                 error: function(data, err) {
                     alert(err.message);

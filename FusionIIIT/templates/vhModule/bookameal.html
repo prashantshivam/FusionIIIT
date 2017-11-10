@@ -9,109 +9,87 @@
 
     <div class="ui active tab" data-tab="bookameal">
         <div class="ui vertical segment">
+                    <table class="ui structured sortable celled table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="four wide">Name</th>
+                                <th colspan="5"><center>Meals Served</center></th>
+                                <th rowspan="2" >Submit</th>
+                            </tr>
 
-            <form class="ui form">
+                            <tr>
+                                <th>Bed-Tea</th>
+                                <th>Breakfast</th>
+                                <th>Lunch</th>
+                                <th>Eve Tea</th>
+                                <th>Dinner</th>
+                            </tr>
+                        </thead>
 
-                <div class="two fields">
-
-                    <div class="field">
-                        <label>For Date:</label>
-                        <div class="ui calendar" id="rangeend">
-                            <div class="ui input left icon">
-                                <i class="calendar icon"></i>
-                                <input type="text" placeholder="Pick a date">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label><br></label>
-                        <button class="ui primary right floated button" id="bookameal-date-submit">
-                            Submit
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <br>
-            <div class="table-display-unit" style="display: none;">
-                <div class="ui divider"></div>
-
-                <table class="ui structured sortable celled table">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" class="four wide">Name</th>
-                            <th rowspan="2" class="one wide">Room</th>
-                            <th rowspan="2" class="two wide">Date</th>
-                            <th colspan="5"><center>Meals Served</center></th>
-                        </tr>
-
-                        <tr>
-                            <th>Bed-Tea</th>
-                            <th>Breakfast</th>
-                            <th>Lunch</th>
-                            <th>Eve Tea</th>
-                            <th>Dinner</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>
-                                <h4 class="ui image header">
-                                    <div class="content">
-                                        Zlatan Ibrahimovic
-                                        <div class="sub header">gmail@zlatan.com
+                        <tbody>
+                            {% for guest in guest_meals %}
+                            <form class="ui form" id="form{{guest.visitor.id}}">
+                            <tr>
+                                <td>
+                                    <h4 class="ui image header">
+                                        <div class="content">
+                                            {{ guest.visitor.visitor_name }}
+                                            <div class="sub header">
+                                                {{guest.visitor.visitor_email}}
+                                            </div>
                                         </div>
+                                    </h4>
+                                </td>
+
+                                <td>
+                                    <div class="ui checkbox">
+                                        <input name="" type="checkbox" value="1" name="food{{guest.visitor_id}}">
+                                        <label></label>
                                     </div>
-                                </h4>
-                            </td>
+                                </td>
 
-                            <td>G - 007</td>
+                                <td>
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" value="2" name="food{{guest.visitor_id}}">
+                                        <label></label>
+                                    </div>
+                                </td>
 
-                            <td>10<sup>th</sup> Aug'17</td>
+                                <td>
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" value="3" name="food{{guest.visitor_id}}">
+                                        <label></label>
+                                    </div>
+                                </td>
 
-                            <td>
-                                <div class="ui checkbox">
-                                    <input name="" type="checkbox">
-                                    <!-- <input name="" type="checkbox" checked> -->
-                                    <label></label>
-                                </div>
-                            </td>
+                                <td>
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" value="4" name="food{{guest.visitor_id}}">
+                                        <label></label>
+                                    </div>
+                                </td>
 
-                            <td>
-                                <div class="ui checkbox">
-                                    <input name="" type="checkbox">
-                                    <label></label>
-                                </div>
-                            </td>
-
-                            <td>
-                                <div class="ui checkbox">
-                                    <input name="" type="checkbox">
-                                    <label></label>
-                                </div>
-                            </td>
-
-                            <td>
-                                <div class="ui checkbox">
-                                    <input name="" type="checkbox">
-                                    <label></label>
-                                </div>
-                            </td>
-
-                            <td>
-                                <div class="ui checkbox">
-                                    <input name="" type="checkbox">
-                                    <label></label>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                <td>
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" value="5" name="food{{guest.visitor_id}}">
+                                        <label></label>
+                                    </div>
+                                </td>
+                                <input type="hidden" value="{{ guest.visitor.id }}" name="visitor_id">
+                                <td>
+                                    <div class="field">
+                                        <label></label>
+                                        <button class="ui primary right floated button bookameal-submit" id="btn{{guest.visitor.id}}" data-pk="{{guest.visitor.id}}"
+                                            Submit
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </form>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
         </div>
-    </div>
-
 {% endblock %}
 

@@ -45,8 +45,8 @@
                         </td>
 
                         <td>
-                            {% if item.consumable == "True" %}
-                            true
+                            {% if item.consumable %}
+                                <i class="large green checkmark icon"></i>
                             {% endif %}
                         </td>
 
@@ -72,13 +72,13 @@
 
         <div class="ui active tab" data-tab="additem" style="padding: 16px;">
             <div class="ui vertical segment">
-                <form class="ui form">
+                <form class="ui form" id="add-item-form">
                     <div id="item" class="reset-this-form">
                         <div class="two fields">
                             <div class="ten wide field">
                                 <label>Bill Id</label>
                                 <div class="ui large input">
-                                    <input placeholder="Bill Id">
+                                    <input placeholder="Bill Id" name="bill-id">
                                 </div>
                             </div>
                         </div>
@@ -89,28 +89,28 @@
                             <div class="field">
                                 <label>Item Name</label>
                                 <div class="ui input large">
-                                    <input placeholder="Item Name">
+                                    <input placeholder="Item Name" name="item-name">
                                 </div>
                             </div>
 
                             <div class="field">
                                 <label>Quantity</label>
                                 <div class="ui input large">
-                                    <input placeholder="Quantity">
+                                    <input placeholder="Quantity" name="quantity">
                                 </div>
                             </div>
 
                             <div class="field">
                                 <label>Amount</label>
                                 <div class="ui input large">
-                                    <input placeholder="Amount">
+                                    <input placeholder="Amount" name="amount">
                                 </div>
                             </div>
 
                             <div class="field">
                                 <label>Consumable</label>
                                 <div class="ui fitted toggle checkbox">
-                                    <input type="checkbox"> <label></label>
+                                    <input type="checkbox" name="consumable"> <label></label>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                         </div>
 
                         <div class=" two wide field">
-                            <div class="ui primary button">
+                            <div class="ui primary button" id="add-item-form-submit">
                                 Submit
                             </div>
                         </div>

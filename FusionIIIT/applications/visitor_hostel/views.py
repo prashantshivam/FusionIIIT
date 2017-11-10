@@ -32,6 +32,10 @@ def visitorhostel(request):
     # rooms booked for a visitor
     # rooms_booked = Visitor_room.objects.filter()
 
+    # to book meals
+    guest_meals = Book_room.objects.filter(check_in__lte = datetime.datetime.today(),
+                                            booking_to__gte = datetime.datetime.today())
+
     allBookingForm = ViewBooking()
 
     cancelBookingForm = Book_room.objects.filter(status = "Confirm")
@@ -81,6 +85,7 @@ def visitorhostel(request):
                    'under_maintainence_rooms' : under_maintainence_rooms,
                    'occupied_rooms' : occupied_rooms,
                    'inventory' : inventory,
+                   'guest_meals' : guest_meals,
                    'allBookingForm' :allBookingForm,
                    'cancelBookingForm':cancelBookingForm,
                    'checkInForm' :checkInForm,
@@ -324,9 +329,8 @@ def meal_book(request):
         if request.method == "POST":
             form=MealBooking(request.POST)
             if form.is_valid:
-                id=request.POST.getlist('visitor')
-                id=id[0]
-                visitor=Visitor.objects.all().filter(id=id)
+                id=request.POST.get('visitor')
+                visitor=Visitor.objects.filter(id=id)
                 print(visitor)
                 id=visitor[0]
                 date_1=request.POST.getlist('date')
@@ -369,18 +373,19 @@ def meal_book(request):
                 else:
                     dinner=False
 
-
                 person=request.POST.getlist('persons')[0]
 
-                Meal.objects.create(visitor=id,morning_tea=m_tea,eve_tea=e_tea,meal_date=date_1,breakfast=breakfast,lunch=lunch,dinner=dinner,persons=person)
-                print("ok")
+                Meal.objects.create(visitor=id,
+                                    morning_tea=m_tea,
+                                    eve_tea=e_tea,
+                                    meal_date=date_1,
+                                    breakfast=breakfast,
+                                    lunch=lunch,
+                                    dinner=dinner,
+                                    persons=person)
 
-            messages.success(request, 'No guest checked in currently')
-            return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-
+            return HttpResponseRedirect('/visitorhostel/')
         else:
-            #form=MealBooking()
-            #return render(request, "vhModule/bookingmea1.html",{'form':form})
             return HttpResponseRedirect('/visitorhostel/')
 
 
@@ -479,7 +484,7 @@ def BookaRoom(request):
                                                purpose=purpose,
                                                booking_to=date_2,
                                                booking_from=date_1)
-            return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+            return HttpResponseRedirect('/visitorhostel/')
         else:
             return HttpResponseRedirect('/visitorhostel/')
 
@@ -489,13 +494,9 @@ def add_to_inventory(request):
 
 def edit_room_status(request):
     if request.method == 'POST':
-        room=request.POST.getlist('change')[0]
+        room=request.POST.get('change')
         room=Room.objects.filter(room_number=room)[0]
-        print(type(room))
         Room_Status.objects.filter(room_id=room).update(status="UnderMaintenance")
-        return HttpResponseRedirect('/visitorhostel/vh_homepage/')
+        return HttpResponseRedirect('/visitorhostel/')
     else:
-        #edit_room_status=Room_Status.objects.filter(Q(status="UnderMaintenance") | Q(status="Available"))
-        #print(edit_room_status)
-        #return render(request,"vhModule/edit_room_status1.html",{'context':edit_room_status})
         return HttpResponseRedirect('/visitorhostel/')
