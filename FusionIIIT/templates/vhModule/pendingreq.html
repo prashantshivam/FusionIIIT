@@ -25,7 +25,6 @@
 
                     <th>Approve</th>
 
-                    <th>Decline</th>
                 </tr>
             </thead>
 
@@ -44,7 +43,12 @@
                     </td>
 
                     <td>
-                        E-417
+                        <select class="selectpicker" name="" data-width="100%" multiple title="rooms" multiple data-live-search="true">
+                          {% for available_rooms1 in available_rooms %}
+                            <option value="{{available_rooms1.pk}}">{{available_rooms1.room}}</option>
+                          {% endfor %}
+                        </select>
+
                     </td>
 
                     <td>
@@ -56,16 +60,10 @@
                     </td>
 
                     <td class="collapsing">
-                        <div class="ui fitted slider checkbox" id="approve">
-                            <input type="checkbox"> <label></label>
-                        </div>
+                        <i class="checkmark icon accept_booking" id="accept{{booking.pk}}" data-pk="{{booking.pk}}"></i>
+                        <i class="remove icon remove_booking" id="remove{{booking.pk}}" data-pk="{{booking.pk}}"></i>
                     </td>
 
-                    <td class="collapsing">
-                        <div class="ui fitted slider checkbox" id="decline">
-                            <input type="checkbox"><label></label>
-                        </div>
-                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

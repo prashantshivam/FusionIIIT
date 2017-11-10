@@ -201,24 +201,17 @@
             $('input[name=food'+pk+']:checked').each(function(){
                 food.push($(this).val());
             });
-            alert(food);
-            alert(pk);
             $.ajax({
                 type: 'POST',
                 url: '/visitorhostel/bookmeal/',
                 data: {
-                    // 'visitor' : $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value,
-                    // 'quantity' : $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value,
-                    // 'amount' : $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value,
-                    // 'consumable' : $('.reset-this-form')[0].children[2].children[3].children[1].children[0].value,
+                    'pk' : pk,
+                    'numberofpeople': $('input[name="numberofpeople-meal]"')
                     'food':food,
-
                     'csrfmiddlewaretoken': '{{csrf_token}}'
                 },
                 success: function(data) {
-                    $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value = "";
-                    $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value = "";
-                    $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value = "";
+                    alert('aya');
                 },
                 error: function(data, err) {
                     alert(err.message);
@@ -314,8 +307,34 @@
                 error: function(data, err) {
                     alert(err.message);
                 }
-            });
+ ;           });
         });
+        $('.accept_booking').click(function(){
+            var pk = $(this).attr('data-pk');
+            var room = [];
+
+            $.ajax({
+                type: 'POST',
+                url: '/visitorhostel/vh_booking_request/',
+                data: {
+                    'status': 0,
+                    'pk': pk,
+                    'rooms': room ,
+                    'csrfmiddlewaretoken': '{{csrf_token}}'
+                },
+                success: function(data) {
+                    alert("Success");
+                    // $('#bookaroom-form')[0].reset();
+                },
+                error: function(data, err) {
+                    alert(err.message);
+                }
+
+        });
+         $('.selectpicker').selectpicker({
+            style: 'btn-info',
+            size: 4
+          });
     </script>
     <!-- Room status Js ends -->
 

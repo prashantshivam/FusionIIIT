@@ -105,13 +105,12 @@ def booking_request(request):
 
     if user :
         if request.method == 'POST' :
-            if 'confirm' in request.POST:
+            if '0' in request.POST.get('status'):
                 room_available = Room_Status.objects.filter(status="Available")
                 if not room_available:
                     messages.success(request, 'no room available')
                     return HttpResponseRedirect('/visitorhostel/vh_homepage/')
-                id = request.POST.getlist('confirm')
-                id = id[0]
+                id = request.POST.get('0')
                 book = Book_room.objects.filter(id=id).first()
                 print(book)
                 id = book.id
@@ -329,7 +328,7 @@ def meal_book(request):
         if request.method == "POST":
             form=MealBooking(request.POST)
             if form.is_valid:
-                id=request.POST.get('visitor')
+                id=request.POST.get('pk')
                 visitor=Visitor.objects.filter(id=id)
                 print(visitor)
                 id=visitor[0]
@@ -340,40 +339,35 @@ def meal_book(request):
                 else:
                     date_1=date_1[0]
 
-                m_tea=request.POST.getlist('morning_tea')
-                if m_tea:
+                if 1 in food:
                     m_tea=True
                 else:
                     m_tea=False
 
-                e_tea=request.POST.getlist('eve_tea')
-                if e_tea:
+                if 4 in food:
                     e_tea=True
                 else:
                     e_tea=False
 
 
-                breakfast=request.POST.getlist('breakfast')
-                if breakfast:
+                if 2 in food:
                     breakfast=True
                 else:
                     breakfast=False
 
 
-                lunch=request.POST.getlist('lunch')
-                if lunch:
+                if 3 in food:
                     lunch=True
                 else:
                     lunch=False
 
 
-                dinner=request.POST.getlist('dinner')
-                if dinner:
+                if 5 in food:
                     dinner=True
                 else:
                     dinner=False
 
-                person=request.POST.getlist('persons')[0]
+                person=request.POST('numberofpeople')
 
                 Meal.objects.create(visitor=id,
                                     morning_tea=m_tea,
