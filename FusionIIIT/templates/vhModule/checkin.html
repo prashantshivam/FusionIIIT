@@ -24,9 +24,17 @@
                                 <label>Name </label>
                                 <div class="ui search selection dropdown">
                                     <input name="visitor_name" type="hidden">
-                                </div>
-                                <div class=""></div>
+                                    <i class="dropdown icon"></i>
 
+                                    <div class="default text">Select</div>
+                                    <div class="menu">
+                                        {% for guest in to_check_in %}
+                                            <div class="item" data-value="1">
+                                                {{ guest.visitor.visitor_name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="field">
@@ -85,7 +93,7 @@
 
                     <div class="field">
                         <label><br></label>
-                        <div class="ui large right floated primary button">
+                        <div class="ui large right floated primary button" id="checkin-submit">
                             Submit
                         </div>
                     </div>

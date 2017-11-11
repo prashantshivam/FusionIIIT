@@ -36,7 +36,7 @@ def visitorhostel(request):
     guest_meals = Book_room.objects.filter(check_in__lte = datetime.datetime.today(),
                                             booking_to__gte = datetime.datetime.today())
 
-    allBookingForm = ViewBooking()
+    to_check_in = Book_room.objects.filter(status = "Confirm", check_in=None)
 
     cancelBookingForm = Book_room.objects.filter(status = "Confirm")
 
@@ -54,7 +54,6 @@ def visitorhostel(request):
             checkInForm.append(x)
     print(checkInForm)
 
-
     room_status=Room_Status.objects.filter(status = "CheckedIn")
     book_room = Book_room.objects.all().filter(booking_to__gte=datetime.datetime.today())
     context1 = []
@@ -69,10 +68,6 @@ def visitorhostel(request):
             checkOutForm.append(x)
     print(checkOutForm)
 
-    roomAvailabiltyForm=RoomAvailability()
-
-    bookaRoomForm=Room_booking()
-
     edit_room_statusForm=Room_Status.objects.filter(Q(status="UnderMaintenance") | Q(status="Available"))
 
     return render(request, "vhModule/visitorhostel.html",
@@ -86,13 +81,7 @@ def visitorhostel(request):
                    'occupied_rooms' : occupied_rooms,
                    'inventory' : inventory,
                    'guest_meals' : guest_meals,
-                   'allBookingForm' :allBookingForm,
-                   'cancelBookingForm':cancelBookingForm,
-                   'checkInForm' :checkInForm,
-                   'checkOutForm' :checkOutForm,
-                   'roomAvailabiltyForm' :roomAvailabiltyForm,
-                   'bookaRoomForm' :bookaRoomForm,
-                   'edit_room_statusForm' :edit_room_statusForm})
+                   'to_check_in' : to_check_in})
 
 
 def vh_homepage(request):
@@ -202,8 +191,6 @@ def check_in(request):
     user = get_object_or_404(User, username=request.user.username)
     c=ExtraInfo.objects.all().filter(user=user)
 
-    ####st=str(c.designation)
-    #print(st)
     if user:
         if request.method =='POST' :
             id=request.POST.getlist('checkedin')
@@ -326,57 +313,54 @@ def meal_book(request):
 
     if user:
         if request.method == "POST":
-            form=MealBooking(request.POST)
-            if form.is_valid:
-                id=request.POST.get('pk')
-                visitor=Visitor.objects.filter(id=id)
-                print(visitor)
-                id=visitor[0]
-                date_1=request.POST.getlist('date')
-                if not date_1:
-                    messages.success(request, 'No guest checked in currently')
-                    return HttpResponseRedirect('/visitorhostel/bookingmea1.html/')
-                else:
-                    date_1=date_1[0]
 
-                if 1 in food:
-                    m_tea=True
-                else:
-                    m_tea=False
+            id=request.POST.get('pk')
+            visitor=Visitor.objects.filter(id=id)
+            print(visitor)
+            id=visitor[0]
+            date_1=datetime.datetime.today
 
-                if 4 in food:
-                    e_tea=True
-                else:
-                    e_tea=False
+            if 1 in food:
+                m_tea=True
+            else:
+                m_tea=False
+
+            if 4 in food:
+                e_tea=True
+            else:
+                e_tea=False
 
 
-                if 2 in food:
-                    breakfast=True
-                else:
-                    breakfast=False
+            if 2 in food:
+                breakfast=True
+            else:
+                breakfast=False
 
 
-                if 3 in food:
-                    lunch=True
-                else:
-                    lunch=False
+            if 3 in food:
+                lunch=True
+            else:
+                lunch=False
 
 
-                if 5 in food:
-                    dinner=True
-                else:
-                    dinner=False
+            if 5 in food:
+                dinner=True
+            else:
+                dinner=False
 
+            if person:
                 person=request.POST('numberofpeople')
+            else:
+                person = 1
 
-                Meal.objects.create(visitor=id,
-                                    morning_tea=m_tea,
-                                    eve_tea=e_tea,
-                                    meal_date=date_1,
-                                    breakfast=breakfast,
-                                    lunch=lunch,
-                                    dinner=dinner,
-                                    persons=person)
+            Meal.objects.create(visitor=id,
+                                morning_tea=m_tea,
+                                eve_tea=e_tea,
+                                meal_date=date_1,
+                                breakfast=breakfast,
+                                lunch=lunch,
+                                dinner=dinner,
+                                persons=person)
 
             return HttpResponseRedirect('/visitorhostel/')
         else:

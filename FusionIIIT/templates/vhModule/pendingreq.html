@@ -15,6 +15,8 @@
                 <tr>
                     <th>Intender</th>
 
+                    <th>Visitor</th>
+
                     <th>Room(s)</th>
 
                     <th>Type</th>
@@ -42,6 +44,8 @@
                         </h4>
                     </td>
 
+                    <td>{{ booking.visitor.visitor_name }}</td>
+
                     <td>
                         <select class="selectpicker" name="" data-width="100%" multiple title="rooms" multiple data-live-search="true">
                           {% for available_rooms1 in available_rooms %}
@@ -56,7 +60,7 @@
                     </td>
 
                     <td>
-                        ...
+
                     </td>
 
                     <td class="collapsing">
