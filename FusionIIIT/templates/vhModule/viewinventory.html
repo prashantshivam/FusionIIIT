@@ -5,43 +5,41 @@
         <a class="active item" data-tab="viewinventory">
             Inventory
         </a>
-        <div class="right floated right aligned" style="width: 100%;">
-            <i class="plus icon" style="font-size:30px;float: right;"></i>
-            <i class="edit icon" style="font-size: 30px;float: right;"></i>
-        </div>
     </div>
 
     {% comment %}The Past bookings segment starts here!{% endcomment %}
+    <button class="ui primary button" style="float: right;" onclick="modalAddItem()">Add Item</button>
+    <br>
+    <br>
     <div class="ui active tab" data-tab="viewinventory">
         <div class="ui vertical segment">
             <table class="ui structured celled sortable table" style="margin-bottom: 16px;">
                 <thead>
                 <tr>
-                    <th>Bill-No.</th>
                     <th>Item</th>
                     <th>Quantity</th>
-                    <th>Cost</th>
                     <th>Consumable</th>
                 </tr>
                 </thead>
 
                 <tbody>
                     {% for item in inventory %}
-                    <tr>
-                        <td>
-                            {{item.bill_number }}
-                        </td>
-
+                    <tr class="inventory-item">
                         <td>
                             {{ item.item_name }}
                         </td>
 
                         <td>
-                            {{ item.quantity }}
-                        </td>
+                            <div class="field" style="display: none" id=select-{{item.id}}>
+                                <div class="ui input">
+                                    <input name="quantity" type="number" onchange='submit_inventory_form("{{ item.id}}")' id="input-{{item.id}}">
+                                </div>
+                            </div>
 
-                        <td>
-                            {{ item.cost }}
+                            <span style="display: inline;" id=show-{{item.id}} >
+                                {{ item.quantity }}
+                            </span>
+                            <i class="edit icon" onclick="update_inventory_form('{{ item.id }}')" style="float: right;" id="submit-{{item.id}}"></i>
                         </td>
 
                         <td>
@@ -54,88 +52,19 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <button type="Submit" name="submit" id="update-inventory-submit" style="display: none">Submit</button>
 
             <br>
             <div class="ui divider"></div>
         </div>
-    </div>
 
-    <!-- Add item section -->
 
-    <div id="add-item-section" style="display: none;">
-
-        <div class="ui pointing secondary menu">
-            <a class="active item" data-tab="additem">
-                Add Item
-            </a>
-        </div>
-
-        <div class="ui active tab" data-tab="additem" style="padding: 16px;">
-            <div class="ui vertical segment">
-                <form class="ui form" id="add-item-form">
-                    <div id="item" class="reset-this-form">
-                        <div class="two fields">
-                            <div class="ten wide field">
-                                <label>Bill Id</label>
-                                <div class="ui large input">
-                                    <input placeholder="Bill Id" name="bill-id">
-                                </div>
-                            </div>
-                        </div>
-
-                        <h5 class="ui dividing header">Add Items</h5>
-
-                        <div class="four fields">
-                            <div class="field">
-                                <label>Item Name</label>
-                                <div class="ui input large">
-                                    <input placeholder="Item Name" name="item-name">
-                                </div>
-                            </div>
-
-                            <div class="field">
-                                <label>Quantity</label>
-                                <div class="ui input large">
-                                    <input placeholder="Quantity" name="quantity" type="number">
-                                </div>
-                            </div>
-
-                            <div class="field">
-                                <label>Amount</label>
-                                <div class="ui input large">
-                                    <input placeholder="Amount" name="amount" type="number">
-                                </div>
-                            </div>
-
-                            <div class="field">
-                                <label>Consumable</label>
-                                <div class="ui fitted toggle checkbox">
-                                    <input type="checkbox" name="consumable"> <label></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="four fields">
-                        <div class="eight wide field"></div>
-                        <div class="four wide field">
-                            <div class="ui button right floated" id="add-more-items-inventory">
-                                Add Another Item
-                            </div>
-                        </div>
-
-                        <div class=" two wide field">
-                            <div class="ui primary button" id="add-item-form-submit">
-                                Submit
-                            </div>
-                        </div>
-                        <div class=" two wide field"></div>
-                    </div>
-
-                    <br>
-                    <br>
-                </form>
-            </div>
-        </div>
-    </div>
+<div class="ui modal" id="addItemModal">
+  <div class="header">Add Items</div>
+  <div class="scrolling content">
+    {% include 'vhModule/additem.html' %}
+  </div>
+</div>
 {% endblock %}
+
+

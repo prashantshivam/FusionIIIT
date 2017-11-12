@@ -1,33 +1,18 @@
-{% block bookaroom %}
-    {% comment %}The tab menu starts here!{% endcomment %}
-    <div class="ui pointing secondary menu">
-        <a class="active item" data-tab="bookaroom">
-            Book a Room
-        </a>
-    </div>
-
-    <div class="ui active tab" data-tab="bookaroom">
-        <div class="ui vertical stripe team segment"
-             style="padding-left: 3.5%;
-                padding-right: 3.5%;">
-
-            <form class="ui large form" id="bookaroom-form">
-
-                {% comment %} The visitor room form  starts here! {% endcomment %}
-                <div id="bookaroom">
-                    {% comment %}The form row starts here!{% endcomment %}
-
+{% block bookingrequestaction %}
+        <div class="ui vertical stripe team segment" id="request_modal">
+            {% for booking in request_detail %}
+            <form class="ui large form">
+                <div>
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
                                 <label>Name </label>
-
-                                <input name="name" type="text" placeholder="Name">
+                                <input type="text" value="{{ booking.visitor.visitor_name }}" readonly>
                             </div>
 
                             <div class="field">
                                 <label>Organisation</label>
-                                <input placeholder="Organisation" type="text" name="organisation">
+                                <input type="text" value="" readonly>
                             </div>
                         </div>
                     </div>
@@ -36,12 +21,12 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>Phone </label>
-                                <input placeholder="Phone" type="number" name="phone">
+                                <input  type="number" value="{{ booking.visitor.visitor_phone}}" readonly>
                             </div>
 
                             <div class="field">
                                 <label>Email</label>
-                                <input placeholder="Email" type="Email" name="email">
+                                <input type="Email" value="{{ booking.visitor.visitor_email }}">
                             </div>
                         </div>
                     </div>
@@ -53,7 +38,7 @@
                             <div class="ui calendar" id="rangestart1">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="From" name="booking_from" class="date-selector">
+                                    <input type="text" class="date-selector" value="{{ booking.booking_from }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -63,24 +48,23 @@
                             <div class="ui calendar" id="rangeend1">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="To" name="booking_to" class="date-selector">
+                                    <input type="text" value="{{ booking.booking_to }}" class="date-selector" readonly>
                                 </div>
                             </div>
                         </div>
                         </div>
 
-
                     <div class="sixteen wide field">
                         <label>Address</label>
                         <div class="ui fluid input">
-                            <textarea class="ui textarea" rows="2" name="address"></textarea>
+                            <textarea class="ui textarea" rows="2" value="{{ booking.visitor.visitor_address }}"></textarea>
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="four fields">
 
-                            <div class="field" style="display: none;">
+                            <div class="field">
                                 <label>Category:</label>
 
                                 <div class="ui fluid search selection dropdown">
@@ -112,23 +96,23 @@
                             <div class="field">
                                 <label>Country</label>
                                 <div class="ui fluid input">
-                                    <input name="country" name="country">
+                                    <input value="{{ booking.visitor.nationality }}" readonly>
                                 </div>
                             </div>
 
                             <div class="field">
-                                <label>Number Of People </label>
+                                <label>Number Of People</label>
 
                                 <div class="ui fluid input">
-                                    <input name="numberofpeople" type="number">
+                                    <input value="{{ booking.person_count }}" type="number" readonly>
                                 </div>
                             </div>
 
-                            <div class="field" style="display: none;">
+                            <div class="field">
                                 <label>Rooms</label>
-                                <select name="skills" multiple="" class="ui fluid dropdown">
+                                <select name="rooms" multiple="" class="ui fluid dropdown">
                                     {% for room in available_rooms %}
-                                    <option value='{{ room }}'>{{ room }}</option>
+                                        <option value='{{ room }}'>{{ room }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -138,40 +122,20 @@
                     <div class="field">
                         <label>Purpose Of Visit</label>
                         <div class="ui fluid input">
-                            <textarea rows="2" name="purposeofvisit"></textarea>
+                            <textarea rows="2" value="{{ booking.purpose }}" readonly></textarea>
                         </div>
                     </div>
 
                 </div>
-                <div class="two field">
-                    <div class="field" style="display: none;">
-                        <label>Intender ID:</label>
-                        <div class="ui fluid search selection dropdown">
-                            <input name="category" type="hidden" name="intender">
-                            <i class="dropdown icon"></i>
-
-                            <div class="default text">Select</div>
-
-                            <div class="menu" >
-                                {% for intender in intenders%}
-                                <div class="item" data-value="">
-                                    {{ intender.username}}
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="field">
                     <label></label>
-                    <div class="ui large primary button right floated" id="booking-form-submit">
+                    <div class="ui large primary button right floated" id="booking-detail-submit">
                         Submit
                     </div>
                 </div>
                 <br>
                 <br>
             </form>
+            {% endfor %}
         </div>
-        <br>
-        <div class="extra content"></div>
-    </div>
 {% endblock %}

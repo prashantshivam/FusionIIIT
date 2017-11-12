@@ -4,9 +4,6 @@
         <a class="active item" data-tab="roomstatus">
             Room Status
         </a>
-        <div style="width: 100%;">
-            <i class="edit icon right" style="font-size: 30px; float: right;"  id="edit-room-status"></i>
-        </div>
     </div>
 
     <div class="ui active tab" data-tab="roomstatus">
@@ -31,17 +28,36 @@
                         <td>
                             {{ instance.room.room_floor }}
                         </td>
-                        <td class="editable">
-                            {{ instance.status }}
+                        <td>
+                            <div class="field" style="display: none" id=select-{{instance.room.room_number}}>
+                                <div class="ui fluid search selection dropdown">
+                                    <input name="Select" type="hidden" onchange='submit_room_status("{{ instance.room.room_number }}")' id="input-{{instance.room.room_number}}">
+                                    <i class="dropdown icon"></i>
+
+                                    <div class="default text">{{ instance.status }}</div>
+                                    <div class="menu">
+                                        <div class="item" data-value="UnderMaintenance">
+                                            Under Maintenance
+                                        </div>
+
+                                        <div class="item" data-value="Available">
+                                            Available
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span style="display: inline;" id=show-{{instance.room.room_number}} >
+                                {{ instance.status }}
+                            </span>
+                            <i class="edit icon" onclick="edit_room_status('{{ instance.room.room_number }}')" style="float: right;" id="submit-{{instance.room.room_number}}"></i>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-
-            <button class="ui primary right floated button" style="display: none;" id="room-status-submit">
-                Submit
-            </button>
+            <br>
+            <br>
         </div>
     </div>
 {% endblock %}

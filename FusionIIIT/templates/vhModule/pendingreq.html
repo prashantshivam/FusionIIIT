@@ -13,26 +13,19 @@
         <table class="ui very basic collapsing celled sortable table">
             <thead>
                 <tr>
-                    <th>Intender</th>
+                    <th class="three wide column">Intender</th>
 
-                    <th>Visitor</th>
+                    <th class="three wide column">Visitor</th>
 
-                    <th>Room(s)</th>
+                    <th class="three wide column">Booking From</th>
 
-                    <th>Type</th>
-
-                    <th class="three wide column">
-                        Details
-                    </th>
-
-                    <th>Approve</th>
-
+                    <th class="three wide column">Booking To</th>
                 </tr>
             </thead>
 
             <tbody>
                 {% for booking in pending_bookings %}
-                <tr>
+                <tr onclick=bookingActionModal('{{ booking.id }}','{{ csrf_token }}')>
                     <td>
                         <h4 class="ui image header">
                             <div class="content">
@@ -47,27 +40,12 @@
                     <td>{{ booking.visitor.visitor_name }}</td>
 
                     <td>
-                        <select class="selectpicker" name="" data-width="100%" multiple title="rooms" multiple data-live-search="true">
-                          {% for available_rooms1 in available_rooms %}
-                            <option value="{{available_rooms1.pk}}">{{available_rooms1.room}}</option>
-                          {% endfor %}
-                        </select>
-
+                        {{ booking.booking_from }}
                     </td>
 
                     <td>
-
+                        {{ booking.booking_to }}
                     </td>
-
-                    <td>
-
-                    </td>
-
-                    <td class="collapsing">
-                        <i class="checkmark icon accept_booking" id="accept{{booking.pk}}" data-pk="{{booking.pk}}"></i>
-                        <i class="remove icon remove_booking" id="remove{{booking.pk}}" data-pk="{{booking.pk}}"></i>
-                    </td>
-
                 </tr>
                 {% endfor %}
             </tbody>
@@ -77,6 +55,13 @@
         <div class="ui divider"></div>
 
     </div>
+</div>
+
+<div class="ui modal" id="bookingActionModal">
+  <div class="header">Request Action</div>
+  <div class="scrolling content">
+    {% include 'vhModule/bookingrequestaction.html' %}
+  </div>
 </div>
 
 {% endblock %}

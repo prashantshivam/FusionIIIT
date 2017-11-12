@@ -20,6 +20,7 @@
                     <th>To</th>
                     <th>Duration</th>
                     <th>Payment Status</th>
+                    <th class="two wide column">Check In</th>
                 </tr>
                 </thead>
 
@@ -56,6 +57,12 @@
                     <td>
 
                     </td>
+
+                    <td>
+                        <button class="ui primary button" onclick="modalCheckIn()">
+                            Check In
+                        </button>
+                    </td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -66,5 +73,11 @@
 </div>
 <br>
 
+<div class="ui modal" id="checkInModal">
+  <div class="header">Guest Check In</div>
+  <div class="scrolling content">
+    {% include 'vhModule/checkin.html' %}
+  </div>
+</div>
 
 {% endblock %}

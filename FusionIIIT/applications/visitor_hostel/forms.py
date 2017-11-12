@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm
+from .models import Inventory
 from applications.visitor_hostel.models import *
 import datetime
 
@@ -20,6 +21,12 @@ class MealBooking(ModelForm):
 class RoomAvailability(forms.Form):
 	date_from = forms.DateField(initial=datetime.date.today)
 	date_to = forms.DateField(initial=datetime.date.today)
+
+
+class InventoryForm(forms.ModelForm):
+	class Meta:
+		model = Inventory
+		fields = ["item_name", "quantity", "consumable"]
 
 
 class Room_booking(forms.Form):

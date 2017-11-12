@@ -1,13 +1,14 @@
 from django.contrib import admin
 
-from .models import (Book_room, Inventory, Meal, Room, Visitor, Visitor_bill,
-                     Visitor_room, Room_Status)
+from .models import (Booking, Inventory, Meal, RoomDetail, Visitor, Bill,
+                     RoomStatus, InventoryBill)
 
 admin.site.register(Visitor)
-admin.site.register(Book_room)
-admin.site.register(Visitor_bill)
-admin.site.register(Room)
-admin.site.register(Visitor_room)
+admin.site.register(Booking)
+admin.site.register(Bill)
+admin.site.register(RoomDetail)
 admin.site.register(Meal)
 admin.site.register(Inventory)
-admin.site.register(Room_Status)
+admin.site.register(RoomStatus)
+admin.site.register(InventoryBill)
+

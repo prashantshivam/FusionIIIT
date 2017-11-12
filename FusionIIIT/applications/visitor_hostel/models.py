@@ -13,6 +13,7 @@ VISITOR_CATEGORY = (
 ROOM_TYPE = (
     ('SingleBed', 'SingleBed'),
     ('DoubleBed', 'DoubleBed'),
+    ('VIP', 'VIP')
     )
 
 ROOM_FLOOR = (
@@ -32,7 +33,8 @@ ROOM_STATUS = (
 BOOK_ROOM = (
     ('Confirm' , 'Confirm'),
     ('Pending' , 'Pending'),
-    ('Cancel' , 'Cancel'),
+    ('Canceled' , 'Canceled'),
+    ('Complete', 'Complete')
     )
 
 
@@ -45,12 +47,11 @@ class Visitor(models.Model):
     intender = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.visitor_phone
+        return '{} - {}'.format(self.id, self.visitor_name)
 
 
-class Book_room(models.Model):
+class Booking(models.Model):
     visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE)
-    room_count = models.IntegerField(default=1)
     visitor_category = models.CharField(max_length=1, choices=VISITOR_CATEGORY)
     person_count = models.IntegerField(default=1)
     purpose = models.TextField()
@@ -64,26 +65,21 @@ class Book_room(models.Model):
     def __str__(self):
         return str(self.id)
 
-class Visitor_bill(models.Model):
-    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE)
+class Bill(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     caretaker = models.ForeignKey(User, on_delete=models.CASCADE)
     meal_bill = models.IntegerField(default=0)
     room_bill = models.IntegerField(default=0)
     payment_status = models.BooleanField(default=False)
 
 
-class Room(models.Model):
+class RoomDetail(models.Model):
     room_number  = models.CharField(max_length=4, unique=True)
     room_type = models.CharField(max_length=12, choices=ROOM_TYPE)
     room_floor = models.CharField(max_length=12, choices=ROOM_FLOOR)
 
     def __str__(self):
         return self.room_number
-
-
-class Visitor_room(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE)
 
 
 class Meal(models.Model):
@@ -98,9 +94,7 @@ class Meal(models.Model):
 
 class Inventory(models.Model):
     item_name = models.CharField(max_length=20)
-    bill_number = models.CharField(max_length=40)
     quantity = models.IntegerField(default=0)
-    cost = models.IntegerField(default=0)
     consumable = models.BooleanField(default=False)
     opening_stock = models.IntegerField(default=0)
     addition_stock = models.IntegerField(default=0)
@@ -111,11 +105,24 @@ class Inventory(models.Model):
     total_usable = models.IntegerField(default=0)
     remark = models.TextField()
 
-class Room_Status(models.Model):
-    date = models.DateField(null=True, blank=True)
-    room = models.OneToOneField(Room, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, choices=ROOM_STATUS, default = "Available")
-    book_room = models.ForeignKey(Book_room , on_delete =models.CASCADE,unique=False, null=True, blank=True)
+    def __str__(self):
+        return '{} - {}'.format(self.id, self.item_name)
+
+
+class InventoryBill(models.Model):
+    item_name = models.ForeignKey(Inventory, on_delete=models.CASCADE)
+    bill_number = models.CharField(max_length=40)
+    cost = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.room_id)
+        return str(self.bill_number)
+
+
+class RoomStatus(models.Model):
+    date = models.DateField(null=True, blank=True)
+    room = models.ForeignKey(RoomDetail, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=ROOM_STATUS, default = "Available")
+    booking = models.ForeignKey(Booking , on_delete =models.CASCADE,unique=False, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.room.room_number)
