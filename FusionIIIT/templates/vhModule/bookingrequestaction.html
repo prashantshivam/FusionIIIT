@@ -1,8 +1,7 @@
 {% block bookingrequestaction %}
-        <div class="ui vertical stripe team segment" id="request_modal">
-            {% for booking in request_detail %}
+
             <form class="ui large form">
-                <div>
+                {% for booking in request_detail %}
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
@@ -125,8 +124,7 @@
                             <textarea rows="2" value="{{ booking.purpose }}" readonly></textarea>
                         </div>
                     </div>
-
-                </div>
+                {% endfor %}
                 <div class="field">
                     <label></label>
                     <div class="ui large primary button right floated" id="booking-detail-submit">
@@ -136,6 +134,4 @@
                 <br>
                 <br>
             </form>
-            {% endfor %}
-        </div>
 {% endblock %}
