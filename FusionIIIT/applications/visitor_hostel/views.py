@@ -484,4 +484,44 @@ def edit_room_status(request):
 def booking_details(request):
     id = request.POST.get('id')
     request_detail = Booking.objects.filter(id=id)
-    return render(request,"vhModule/bookingrequestaction.html",{'request_detail':request_detail})
+
+    date1=booking_from
+    date2=booking_to
+    br= Book_room.objects.all().filter(booking_from__lte="date1",
+                                       booking_to__gte="date1").exclude(Q(status="Pending")|Q(status="cancel"))
+    br1= Book_room.objects.all().filter(booking_from__gte="date1",
+                                        booking_to__lte=date2).exclude(Q(status="Pending")|Q(status="cancel"))
+    br2= Book_room.objects.all().filter(booking_from__lte=date2,
+                                        booking_to__gte=date2).exclude(Q(status="Pending")|Q(status="cancel"))
+    c=[]
+    for i in br:
+        if i not in c:
+             c.append(i)
+
+
+    for i in br1:
+        if i not in c:
+             c.append(i)
+
+    for i in br2:
+        if i not in c:
+             c.append(i)
+
+    book_room=Book_room.objects.all()
+    booking=[]
+    for i in book_room:
+        if i not in c:
+            booking.append(i)
+
+    room=Room_Status.objects.filter(status="Booked")
+    room_availableForm=[]
+    for i in room:
+        if (i.book_room in booking ):
+            room_availableForm.append(i)
+
+    room=Room_Status.objects.filter(status="Booked")
+    for i in room:
+        room_availableForm.append(i)
+
+    return render(request,"vhModule/bookingrequestaction.html",{'request_detail':request_detail,
+                                                                'room_availableForm' : room_availableFor})
