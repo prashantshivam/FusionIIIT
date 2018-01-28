@@ -15,7 +15,7 @@ class ViewBooking(forms.Form):
 class MealBooking(ModelForm):
 	date = forms.DateField(initial=datetime.date.today)
 	class Meta:
-	        model = Meal
+	        model = MealRecord
 	        exclude = ['meal_date']
 
 class RoomAvailability(forms.Form):

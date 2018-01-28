@@ -7,6 +7,33 @@ function modalCancel(){
     });
 }
 
+function modalDandm(){
+    $(document).ready(function() {
+        $('#dandm')
+          .modal('show')
+        ;
+    });
+}
+
+
+function modalCmc(){
+    $(document).ready(function() {
+        $('#mcm')
+          .modal('show')
+        ;
+    });
+}
+
+
+function modalGoldmedal(){
+    $(document).ready(function() {
+        $('#goldmedal')
+          .modal('show')
+        ;
+    });
+}
+
+
 function modalCheckIn(){
     $(document).ready(function() {
         $('#checkInModal')
@@ -14,6 +41,7 @@ function modalCheckIn(){
         ;
     });
 }
+
 
 function modalAddItem(){
     $(document).ready(function() {
@@ -23,22 +51,14 @@ function modalAddItem(){
     });
 }
 
-function bookingActionModal(id, token){
-
-  $.ajax({
-    type: 'POST',
-    url: '/visitorhostel/booking-details/',
-    data: {
-        'csrfmiddlewaretoken' : token,
-        'id' : id
-    },
-    success: function(data) {
-      $('#bookingActionModal').modal('show');
-      $("#request_modal").append(data);
-    },
-    error: function(data, err) {
-        alert(err.message);
-    }
-  });
+function bookingRequestModal(id){
+    $(document).ready(function() {
+        $('#booking-request-'.concat(id)).modal('show');
+    });
 }
 
+function bookingDetailsModal(id){
+    $(document).ready(function() {
+        ('#booking-details-'.concat(id)).modal('show');
+    });
+}

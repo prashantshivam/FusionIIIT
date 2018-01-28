@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    Vistor Hostel
+    Visitor Hostel
 {% endblock %}
 
 {% block body %}
@@ -10,138 +10,91 @@
         {% include 'dashboard/navbar.html' %}
     {% endblock %}
 
-    {% comment %}The grid starts here!{% endcomment %}
     <div class="ui stackable doubling grid">
 
-        {% comment %}The left-margin segment!{% endcomment %}
         <div class="column"></div>
 
-        {% comment %}
-            The left-rail segment starts here!
-        {% endcomment %}
         <div class="three wide column">
 
-            {% comment %}The user image card starts here!{% endcomment %}
             {% block usercard %}
                 {% include 'globals/usercard.html' %}
             {% endblock %}
-            {% comment %}The user image card ends here!{% endcomment %}
 
             <div class="ui divider"></div>
 
-            {% comment %}The Tab-Menu starts here!{% endcomment %}
             <div class="ui huge fluid vertical pointing menu"
                  style="max-width: 320px;">
 
-                <a class="active item" data-tab="first" id="bookameal">
-                    Book a Meal
-                    <i class="right floated chevron right icon"></i>
-                </a>
-
-                <a class="item" data-tab="second" id="roomstatus">
-                    Room Status
-                    <i class="right floated chevron right icon"></i>
-                </a>
-
-                <a class="item" data-tab="fourth" id="bookaroom">
-                    Book a Room
-                    <i class="right floated chevron right icon"></i>
-                </a>
-
-                <a class="item" data-tab="fifth" id="bookings">
+                <a class="active item" data-tab="first" id="bookings">
                     Bookings
                     <i class="right floated chevron right icon"></i>
                 </a>
 
-                <a class="item" data-tab="sixth" id="checkavailability">
-                    Check Availability
+                <a class="item" data-tab="second" id="bookaroom">
+                    Booking Form
                     <i class="right floated chevron right icon"></i>
                 </a>
 
-                <a class="item" data-tab="eight">
+                <a class="item" data-tab="third" id="roomstatus">
+                    Room Availability
+                    <i class="right floated chevron right icon"></i>
+                </a>
+
+                <a class=" item" data-tab="fourth" id="bookameal">
+                    Meals Record
+                    <i class="right floated chevron right icon"></i>
+                </a>
+
+                <a class="item" data-tab="fifth">
                     Inventory
                     <i class="right floated chevron right icon"></i>
                 </a>
 
-                <a class="item" data-tab="eleventh">
+                <a class="item" data-tab="sixth">
 
                     Guest Check-Out
 
                     <i class="right floated chevron right icon"></i>
                 </a>
-
-                <a class="item" data-tab="twelveth">
-
-                    Booking Requests
-                    <i class="right floated chevron right icon"></i>
-                </a>
-
-                <a class="item" data-tab="thirteen">
-                    Cancel Booking
-                    <i class="right floated chevron right icon"></i>
-                </a>
             </div>
-            {% comment %}The Tab-Menu ends here!{% endcomment %}
         </div>
-        {% comment %}
-            The left-rail segment ends here!
-        {% endcomment %}
 
-
-        {% comment %}
-            The central-rail segment starts here!
-        {% endcomment %}
         <div class="eight wide column">
             {% comment %}The Details start here!{% endcomment %}
 
             <div class="ui active tab segment" data-tab="first">
                 {% block bookameal %}
-                    {% include 'vhModule/bookameal.html' %}
+                    {% include 'vhModule/bookings.html' %}
                 {% endblock %}
             </div>
 
             <div class="ui tab segment" data-tab="second">
                 {% block roomstatus %}
-                    {% include 'vhModule/roomstatus.html' %}
+                    {% include 'vhModule/request-booking.html' %}
+                {% endblock %}
+            </div>
+
+            <div class="ui tab segment" data-tab="third">
+                {% block bookaroom %}
+                    {% include 'vhModule/room-availability.html' %}
                 {% endblock %}
             </div>
 
             <div class="ui tab segment" data-tab="fourth">
-                {% block bookaroom %}
-                    {% include 'vhModule/bookaroom.html' %}
+                {% block bookings %}
+                    {% include 'vhModule/record-meal.html' %}
                 {% endblock %}
             </div>
 
             <div class="ui tab segment" data-tab="fifth">
-                {% block bookings %}
-                    {% include 'vhModule/bookings.html' %}
+                {% block viewinventory %}
+                    {% include 'vhModule/view-inventory.html' %}
                 {% endblock %}
             </div>
 
             <div class="ui tab segment" data-tab="sixth">
-                {% block checkavailability %}
-                    {% comment %}
-                        TODO: what is this page for?
-                    {% endcomment %}
-                    {% include 'vhModule/checkavailability.html' %}
-                {% endblock %}
-            </div>
-
-            <div class="ui tab segment" data-tab="eight">
-                {% block viewinventory %}
-                    {% include 'vhModule/viewinventory.html' %}
-                {% endblock %}
-            </div>
-
-            <div class="ui tab segment" data-tab="eleventh">
                 {% block checkout %}
-                    {% include 'vhModule/checkout.html' %}
-                {% endblock %}
-            </div>
-
-            <div class="ui tab segment" data-tab="twelveth">
-                {% block pendingreq %}
-                    {% include 'vhModule/pendingreq.html' %}
+                    {% include 'vhModule/check-out-modal.html' %}
                 {% endblock %}
             </div>
 
@@ -150,13 +103,10 @@
                     {% include 'vhModule/cancelbooking.html' %}
                 {% endblock %}
             </div>
-            {% comment %}The Publications ends here!{% endcomment %}
+
 
         </div>
-        {% comment %}The central-rail segment ends here!{% endcomment %}
 
-
-        {% comment %}The right-rail segment starts here!{% endcomment %}
         <div class="three wide column">
             <div class="row">
                 {% comment %}
@@ -164,9 +114,7 @@
                 {% endcomment %}
             </div>
         </div>
-        {% comment %}The right-rail segment ends here!{% endcomment %}
 
-        {% comment %}The right-margin segment!{% endcomment %}
         <div class="column"></div>
 
     </div>
@@ -178,318 +126,5 @@
     <script type="text/javascript" src="{% static 'globals/js/datepicker.js' %}"></script>
     <script type="text/javascript" src="{% static 'globals/js/tablesort.js' %}"></script>
     <script type="text/javascript" src="{% static 'globals/js/modal.js' %}"></script>
-
-    <!-- Book a Meal Js -->
-    <script type="text/javascript">
-        $('.bookameal-submit').click(function(event){
-            event.preventDefault();
-            var pk = $(this).attr('data-pk');
-            var food = []
-            $('input[name=food'+pk+']:checked').each(function(){
-                food.push($(this).val());
-            });
-            console.log(food);
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/bookmeal/',
-                data: {
-                    'pk' : pk,
-                    'numberofpeople': $('input[name="numberofpeople-meal"]').val(),
-                    'food':food,
-                    'csrfmiddlewaretoken': '{{csrf_token}}'
-                },
-                success: function(data) {
-                    alert('aya');
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-            });
-        });
-    </script>
-    <!-- Book a Meal Js Ends -->
-
-
-    <script type="text/javascript">
-
-        function update_inventory_form(id){
-            $('#show-'.concat(id)).fadeToggle();
-            $('#select-'.concat(id)).fadeToggle();
-            $('#submit-'.concat(id)).fadeToggle();
-        };
-
-        function submit_inventory_form(id){
-            id = id;
-            quantity = $('#input-'.concat(id))[0].value;
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/update-inventory/',
-                data: {
-                    'csrfmiddlewaretoken': '{{csrf_token}}',
-                    'id' : id,
-                    'quantity' : quantity,
-                },
-                success: function(data) {
-                    $('#show-'.concat(id))[0].innerHTML = quantity;
-                    console.log(room_status);
-                    $('#show-'.concat(id)).fadeToggle();
-                    $('#select-'.concat(id)).fadeToggle();
-                    $('#submit-'.concat(id)).fadeToggle();
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-            });
-        };
-
-    </script>
-    <script type="text/javascript">
-
-        $('.plus').click(function(event){
-            event.preventDefault();
-            if($('#add-item-section')[0].style.display == 'none'){
-                $('#add-item-section')[0].style.display = 'block';
-                window.location.hash ='#add-item-section';
-            }
-        });
-
-        $('#add-more-items-inventory').click(function(event){
-
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/add-to-inventory/',
-                data: {
-                    'item' : $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value,
-                    'quantity' : $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value,
-                    'amount' : $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value,
-                    'consumable' : $('.reset-this-form')[0].children[2].children[3].children[1].children[0].value,
-                    'csrfmiddlewaretoken': '{{csrf_token}}'
-                },
-                success: function(data) {
-                    $('.reset-this-form')[0].children[2].children[0].children[1].children[0].value = "";
-                    $('.reset-this-form')[0].children[2].children[1].children[1].children[0].value = "";
-                    $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value = "";
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-            });
-
-        });
-
-        $('#add-item-form-submit').click(function(event){
-            event.preventDefault();
-            if($('input[name="consumable"]:checked')){
-                consumable = 'True';
-            }
-            else{
-                consumable = 'False';
-            }
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/add-to-inventory/',
-                data: {
-                    'csrfmiddlewaretoken': '{{csrf_token}}',
-                    'item_name' : $('input[name="item-name"]').val(),
-                    'quantity' : $('input[name="quantity"]').val(),
-                    'cost' : $('input[name="cost"]').val(),
-                    'consumable' : consumable,
-                    'bill_number' : $('input[name="bill_number"]').val()
-                },
-                success: function(data) {
-                    alert("Success");
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-
-            });
-
-        });
-    </script>
-    <!-- Inventory Js Ends -->
-
-    <!-- Room Status Js -->
-    <script type="text/javascript">
-        function edit_room_status(id){
-            $('#show-'.concat(id)).fadeToggle();
-            $('#select-'.concat(id)).fadeToggle();
-            $('#submit-'.concat(id)).fadeToggle();
-        };
-
-        var room_status;
-
-        function submit_room_status(id){
-            room_number = id;
-            room_status = $('#input-'.concat(id))[0].value;
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/edit-room-status/',
-                data: {
-                    'csrfmiddlewaretoken': '{{csrf_token}}',
-                    'room_number' : room_number,
-                    'room_status' : room_status,
-                },
-                success: function(data) {
-                    $('#show-'.concat(id))[0].innerHTML = room_status;
-                    console.log(room_status);
-                    $('#show-'.concat(id)).fadeToggle();
-                    $('#select-'.concat(id)).fadeToggle();
-                    $('#submit-'.concat(id)).fadeToggle();
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-            });
-        };
-        $('.accept_booking').click(function(){
-            var pk = $(this).attr('data-pk');
-            var room = [];
-
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/vh_booking_request/',
-                data: {
-                    'status': 0,
-                    'pk': pk,
-                    'rooms': room ,
-                    'csrfmiddlewaretoken': '{{csrf_token}}'
-                },
-                success: function(data) {
-                    alert("Success");
-                    // $('#bookaroom-form')[0].reset();
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-
-        });
-         $('.selectpicker').selectpicker({
-            style: 'btn-info',
-            size: 4
-          });
-     });
-    </script>
-    <!-- Room status Js ends -->
-
-    <!-- Booking Requests Js-->
-    <script type="text/javascript">
-        rooms = $('select[name="rooms"]').dropdown("get value");
-
-    </script>
-    <!-- Booking Request Js Ends -->
-
-    <!-- Book A Room Js -->
-    <script type="text/javascript">
-        $('#booking-form-submit').click(function(event){
-
-            var calendarOpts = {
-                type: 'date',
-                formatter: {
-                    date: function (date, settings) {
-                        if (!date) return '';
-                        var day = date.getDate() + '';
-                        if (day.length < 2) {
-                            day = '0' + day;
-                        }
-                        var month = (date.getMonth() + 1) + '';
-                        if (month.length < 2) {
-                            month = '0' + month;
-                        }
-                        var year = date.getFullYear();
-                        return year + '-' + month + '-' + day;
-                    }
-                }
-            };
-            $('.ui.calendar').calendar(calendarOpts);
-
-            event.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/bookaroom/',
-                data: {
-                    'csrfmiddlewaretoken': '{{csrf_token}}',
-                    'name' : $('input[name="name"]').val(),
-                    'organisation' : $('input[name="organisation"]').val(),
-                    'phone' : $('input[name="phone"]').val(),
-                    'email' : $('input[name="email"]').val(),
-                    'address' : $('textarea[name="address"]').val(),
-                    'category' : $('input[name="category"]').val(),
-                    'country' : $('input[name="country"]').val(),
-                    'numberofpeople' : $('input[name="numberofpeople"]').val(),
-                    'numberofrooms' : $('input[name="numberofrooms"]').val(),
-                    'purposeofvisit' : $('textarea[name="purposeofvisit"]').val(),
-                    'booking_from' : $('input[name="booking_from"]').val(),
-                    'booking_to' : $('input[name="booking_to"]').val(),
-                    'intender' : $('input[name="intender"]').val()
-                },
-                success: function(data) {
-                    alert("Success");
-                    $('#bookaroom-form')[0].reset();
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-            });
-        });
-    </script>
-    <!-- Ends -->
-
-    <!-- Check in Form -->
-    <script type="text/javascript">
-        $('#checkin-submit').click(function(event){
-            event.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/bookaroom/',
-                data: {
-                    'csrfmiddlewaretoken' : '{{csrf_token}}',
-                    'name' : $('input[name="name"]').val(),
-                    'organisation' : $('input[name="organisation"]').val(),
-                    'phone' : $('input[name="phone"]').val(),
-                    'email' : $('input[name="email"]').val(),
-                    'address' : $('textarea[name="address"]').val(),
-                    'category' : $('input[name="category"]').val(),
-                    'country' : $('input[name="country"]').val(),
-                    'numberofpeople' : $('input[name="numberofpeople"]').val(),
-                    'numberofrooms' : $('input[name="numberofrooms"]').val(),
-                    'purposeofvisit' : $('textarea[name="purposeofvisit"]').val(),
-                    'booking_from' : $('input[name="booking_from"]').val(),
-                    'booking_to' : $('input[name="booking_to"]').val()
-                },
-                success: function(data) {
-                    alert("Success");
-                    $('#bookaroom-form')[0].reset();
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-            });
-        });
-    </script>
-
-    <script type="text/javascript" class="inventory-js">
-        $("#edit-inventory").click(function(e){
-            $(".inventory-item").slideToggle();
-            $(".inventory-form").slideToggle();
-            $("#update-inventory-submit").slideToggle();
-        });
-        $("#update-inventory-submit").click(function(e){
-            event.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/visitorhostel/bookaroom/',
-                data: {
-                    'csrfmiddlewaretoken' : '{{csrf_token}}',
-                    'data' : data
-                },
-                success: function(data) {
-                    alert("Success");
-                },
-                error: function(data, err) {
-                    alert(err.message);
-                }
-            });
-        });
-    </script>
+    <script type="text/javascript" src="{% static 'visitor_hostel/visitor-hostel.js' %}"></script>
 {% endblock %}
