@@ -66,66 +66,80 @@ def visitorhostel(request):
 
 @login_required(login_url='/accounts/login/')
 def request_booking(request):
-    intender = request.POST.get('intender')
-    user = User.objects.get(id=intender)
-    booking_id = "VH"+str(datetime.datetime.now())
-    person_count=request.POST.get('numberofpeople')
-    if person_count:
-        person_count = person_count
-    else:
-        person_count = 1
-    purpose=request.POST.get('purposeofvisit')
-    booking_from=request.POST.get('booking_from')
-    booking_to=request.POST.get('booking_to')
-    BookingDetail.objects.create(purpose=purpose,
-                                   intender=user,
-                                   booking_from=booking_from,
-                                   booking_to=booking_to,
-                                   person_count=person_count)
+    if request.method == 'POST':
+        intender = request.POST.get('intender')
+        user = User.objects.get(id=intender)
+        booking_id = "VH"+str(datetime.datetime.now())
+        person_count=request.POST.get('numberofpeople')
+        if person_count:
+            person_count = person_count
+        else:
+            person_count = 1
+        purpose=request.POST.get('purposeofvisit')
+        booking_from=request.POST.get('booking_from')
+        booking_to=request.POST.get('booking_to')
+        BookingDetail.objects.create(purpose=purpose,
+                                       intender=user,
+                                       booking_from=booking_from,
+                                       booking_to=booking_to)
 
-    return HttpResponseRedirect('/visitorhostel/')
+        return HttpResponseRedirect('/visitorhostel/')
+    else:
+        return HttpResponseRedirect('/visitorhostel/')
 
 @login_required(login_url='/accounts/login/')
 def confirm_booking(request):
-    booking_id = request.POST.get('booking-id')
-    intender = request.POST.get('intender'),
-    category=request.POST.get('category')
-    purpose=request.POST.get('purpose')
-    booking_from=request.POST.get('booking_from')
-    booking_to=request.POST.get('booking_to')
-    print (request.POST.get('numberofpeople'))
-    rooms=request.POST.get('numberofrooms')
+    if request.method == 'POST':
+        booking_id = request.POST.get('booking-id')
+        intender = request.POST.get('intender'),
+        category=request.POST.get('category')
+        purpose=request.POST.get('purpose')
+        booking_from=request.POST.get('booking_from')
+        booking_to=request.POST.get('booking_to')
+        person_count=request.POST.get('numberofpeople')
+        rooms=request.POST.get('numberofrooms')
 
-    booking = BookingDetail.objects.filter(id=booking_id).update(intender=intender,
-                                                        visitor_category=category,
-                                                        purpose=purpose,
-                                                        booking_from=booking_from,
-                                                        booking_to=booking_to,
-                                                        person_count=1,
-                                                        status="Confirmed")
+        booking = BookingDetail.objects.filter(id=booking_id).update(intender=intender,
+                                                            visitor_category=category,
+                                                            purpose=purpose,
+                                                            booking_from=booking_from,
+                                                            booking_to=booking_to,
+                                                            person_count=1,
+                                                            status="Confirmed")
 
-    RoomAllotment.objects.filter(booking = booking).update(booking_from=booking_from,
-                                                            booking_to=booking_to)
-    return HttpResponseRedirect('/visitorhostel/')
+        RoomAllotment.objects.filter(booking = booking).update(booking_from=booking_from,
+                                                                booking_to=booking_to)
+        return HttpResponseRedirect('/visitorhostel/')
+    else:
+        return HttpResponseRedirect('/visitorhostel/')
 
 @login_required(login_url='/accounts/login/')
 def cancel_booking(request):
-    booking_id = request.POST.get('booking-id')
-    remark = request.POST.get('remark')
-    BookingDetail.objects.filter(id=booking_id).update(status='Cancelled', remark=remark)
-    return HttpResponseRedirect('/visitorhostel/')
+    if request.method == 'POST':
+        booking_id = request.POST.get('booking-id')
+        remark = request.POST.get('remark')
+        BookingDetail.objects.filter(id=booking_id).update(status='Cancelled', remark=remark)
+        return HttpResponseRedirect('/visitorhostel/')
+    else:
+        return HttpResponseRedirect('/visitorhostel/')
 
 @login_required(login_url='/accounts/login/')
 def reject_booking(request):
-    booking_id = request.POST.get('booking-id')
-    remark = request.POST.get('remark')
-    BookingDetail.objects.filter(id=booking_id).update(status='Rejected', remark=remark)
-    return HttpResponseRedirect('/visitorhostel/')
+    if request.method == 'POST':
+        booking_id = request.POST.get('booking-id')
+        remark = request.POST.get('remark')
+        BookingDetail.objects.filter(id=booking_id).update(status='Rejected', remark=remark)
+        return HttpResponseRedirect('/visitorhostel/')
+    else:
+        return HttpResponseRedirect('/visitorhostel/')
+
 
 @login_required(login_url='/accounts/login/')
 def check_in(request):
-    # fill visitor details and mark three tables
-    return HttpResponseRedirect('/visitorhostel/')
+    if request.method == 'POST':
+        return HttpResponseRedirect('/visitorhostel/')
+    else:
+        return HttpResponseRedirect('/visitorhostel/')
 
 @login_required(login_url='/accounts/login/')
 def check_out(request):

@@ -29,10 +29,10 @@ $('#request-booking-form-submit').on('click', function(event){
         data: {
             'intender' : $('input[name="intender"]').val(),
             'csrfmiddlewaretoken': $('input[name="csrf"]').val(),
-            'booking_from' : $('input[name="booking_from"]').val(),
-            'booking_to' : $('input[name="booking_to"]').val(),
-            'numberofpeople' : $('input[name="numberofpeople"]').val(),
-            'purposeofvisit' : $('textarea[name="purposeofvisit"]').val(),
+            'booking_from' : $('input[name="booking-from"]').val(),
+            'booking_to' : $('input[name="booking-to"]').val(),
+            'numberofpeople' : $('input[name="number-of-people"]').val(),
+            'purposeofvisit' : $('textarea[name="purpose-of-visit"]').val(),
         },
         success: function(data) {
             $('#request-booking-form').reset();

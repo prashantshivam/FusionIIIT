@@ -87,6 +87,7 @@ ENV/
 # docs
 docs/_build
 docs/_templates
+docs/
 
 .tox
 
