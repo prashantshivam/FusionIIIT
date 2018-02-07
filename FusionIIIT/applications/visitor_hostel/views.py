@@ -91,6 +91,7 @@ def request_booking(request):
 def confirm_booking(request):
     if request.method == 'POST':
         booking_id = request.POST.get('booking-id')
+        print(tpyeof(booking_id))
         intender = request.POST.get('intender'),
         category=request.POST.get('category')
         purpose=request.POST.get('purpose')
@@ -98,14 +99,15 @@ def confirm_booking(request):
         booking_to=request.POST.get('booking_to')
         person_count=request.POST.get('numberofpeople')
         rooms=request.POST.get('numberofrooms')
-
-        booking = BookingDetail.objects.filter(id=booking_id).update(intender=intender,
+        booking = BookingDetail.objects.get(id=booking_id)
+        print(booking)
+        BookingDetail.objects.filter(id=booking_id).update(intender=intender,
                                                             visitor_category=category,
                                                             purpose=purpose,
                                                             booking_from=booking_from,
                                                             booking_to=booking_to,
-                                                            person_count=1,
-                                                            status="Confirmed")
+                                                            status="Confirmed",
+                                                            person_count=1)
 
         RoomAllotment.objects.filter(booking = booking).update(booking_from=booking_from,
                                                                 booking_to=booking_to)
@@ -147,77 +149,77 @@ def check_out(request):
     c=ExtraInfo.objects.all().filter(user=user)
 
     if user:
-        if request.method =='POST' :
-            id=request.POST.getlist('checkout')
-            print(id)
+        if request.method =='GET' :
+            id=request.GET.getlist('id')
             id=id[0]
-            book_room=id
-            book_room=Booking.objects.all().filter(id=id)
-            book_room=book_room[0]
-            Booking.objects.all().filter(id=id).update(check_out=datetime.datetime.today())
-            print(type(book_room),"booktoom1")
-            days=(datetime.date.today() - book_room.check_in).days
-            v_id=book_room.visitor
-            category=book_room.visitor_category
-            person=book_room.person_count
+            booking = BookingDetail.objects.get(id=id)
+            visitor_info=booking.visitor.all()
+            i=visitor_info[0]
+            print(i.visitor_name,"nvfkj")
+            rooms=booking.rooms.all()
+            BookingDetail.objects.filter(id=id).update(check_out=datetime.datetime.today())
+            days=(datetime.date.today() - booking.check_in).days
+            category=booking.visitor_category
+            person=booking.person_count
+            for room in rooms:
+                RoomDetail.objects.filter(id=room.id).update(room_status='Available')
+
+            # for visitors in visitor_info:
+
+
             room_bill=0
 
-            book_room=Booking.objects.filter(id=id)
             if category =='A':
                 room_bill=0
             elif category== 'B':
-                for i in book_room:
-                    room_status=RoomStatus.objects.all().filter(book_room=i)
-                    for i in room_status:
-                        if i.room_id.room_type=='SingleBed':
-                            room_bill=room_bill+days*400
-                        else :
-                            room_bill=room_bill+days*500
+                for i in rooms:
+                    if i.room_type=='SingleBed':
+                        room_bill=room_bill+days*400
+                    else :
+                        room_bill=room_bill+days*500
             elif category=='C':
-                for i in book_room:
-                    room_status=RoomStatus.objects.all().filter(book_room=i)
-                    for i in room_status:
-                        if i.room_id.room_type=='SingleBed':
-                            room_bill=room_bill+days*800
-                        else :
-                            room_bill=room_bill+days*1000
+                for i in rooms:
+                    if i.room_type=='SingleBed':
+                        room_bill=room_bill+days*800
+                    else :
+                        room_bill=room_bill+days*1000
             else:
-                for i in book_room:
-                    room_status=RoomStatus.objects.all().filter(book_room=i)
-                    for i in room_status:
-                        if i.room_id.room_type=='SingleBed':
-                            room_bill=room_bill+days*1400
-                        else :
-                            room_bill=room_bill+days*1600
+                for i in rooms:
+                    if i.room_type=='SingleBed':
+                        room_bill=room_bill+days*1400
+                    else :
+                        room_bill=room_bill+days*1600
 
             mess_bill=0
-            meal=Meal.objects.all().filter(visitor=v_id).distinct()
-            print(meal)
-            for m in meal:
-                mess_bill1=0
-                if m.morning_tea==True:
-                    mess_bill1=mess_bill1+ m.persons*10
-                    print(mess_bill1)
-                if m.eve_tea==True:
-                    mess_bill1=mess_bill1+m.persons*10
-                if m.breakfast==True:
-                    mess_bill1=mess_bill1+m.persons*50
-                if m.lunch==True:
-                    mess_bill1=mess_bill1+m.persons*100
-                if m.dinner==True:
-                    mess_bill1=mess_bill1+m.persons*100
-
-                if mess_bill1==m.persons*270:
-                    mess_bill=mess_bill+225*m.persons
-                else:
-                        mess_bill=mess_bill + mess_bill1
-            print(type(v_id))
-            print(book_room[0])
-            RoomStatus.objects.filter(book_room=book_room[0]).update(status="Available",book_room='')
+            #meal=Meal.objects.all().filter(visitor=v_id).distinct()
+            #print(meal)
+            #for m in meal:
+                # mess_bill1=0
+                # if m.morning_tea==True:
+                #     mess_bill1=mess_bill1+ m.persons*10
+                #     print(mess_bill1)
+                # if m.eve_tea==True:
+                #     mess_bill1=mess_bill1+m.persons*10
+                # if m.breakfast==True:
+                #     mess_bill1=mess_bill1+m.persons*50
+                # if m.lunch==True:
+                #     mess_bill1=mess_bill1+m.persons*100
+                # if m.dinner==True:
+                #     mess_bill1=mess_bill1+m.persons*100
+                #
+                # if mess_bill1==m.persons*270:
+                #     mess_bill=mess_bill+225*m.persons
+                # else:
+                #         mess_bill=mess_bill + mess_bill1
+            # print(type(v_id))
+            # print(book_room[0])
+            #RoomStatus.objects.filter(book_room=book_room[0]).update(status="Available",book_room='')
             total_bill=mess_bill + room_bill
-            context = {'v_id':v_id,'visitor':v_id.visitor_name,'mess_bill':mess_bill,'room_bill':room_bill, 't_bill':total_bill}
+            id=booking
+            print(id.intender)
+            context = {'v_id':id.intender.email,'visitor':id.intender,'mess_bill':mess_bill,'room_bill':room_bill, 'total_bill':total_bill}
             print(context)
-            return render(request, "vhModule/payment1.html" , { 'context' : context})
+            return render(request, "vhModule/visitorhostel.html" , { 'context' : context,'visitor_info': visitor_info,'rooms':rooms})
         else :
             return HttpResponseRedirect('/visitorhostel/')
 
