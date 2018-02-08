@@ -222,9 +222,7 @@ $('#confirm-booking').click(function(event){
             'booking_to' : $('input[name="booking_to"]').val()
         },
         success: function(data) {
-            $(document).ready(function() {
-                $('#booking-request-'.concat(id)).modal('hide');
-            });
+            alert("Success");
         },
         error: function(data, err) {
             alert(err.message);

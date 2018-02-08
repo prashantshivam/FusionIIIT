@@ -35,6 +35,7 @@ BOOKING_STATUS = (
     ("Pending" , 'Pending'),
     ("Rejected" , 'Rejected'),
     ("Canceled" , 'Canceled'),
+    ("CheckedIn" , 'CheckedIn'),
     ("Complete", 'Complete')
     )
 

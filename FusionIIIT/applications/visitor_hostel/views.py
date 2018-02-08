@@ -91,7 +91,6 @@ def request_booking(request):
 def confirm_booking(request):
     if request.method == 'POST':
         booking_id = request.POST.get('booking-id')
-        print(tpyeof(booking_id))
         intender = request.POST.get('intender'),
         category=request.POST.get('category')
         purpose=request.POST.get('purpose')
@@ -100,17 +99,9 @@ def confirm_booking(request):
         person_count=request.POST.get('numberofpeople')
         rooms=request.POST.get('numberofrooms')
         booking = BookingDetail.objects.get(id=booking_id)
-        print(booking)
-        BookingDetail.objects.filter(id=booking_id).update(intender=intender,
-                                                            visitor_category=category,
-                                                            purpose=purpose,
-                                                            booking_from=booking_from,
-                                                            booking_to=booking_to,
+        BookingDetail.objects.filter(id=booking_id).update(visitor_category=category,
                                                             status="Confirmed",
-                                                            person_count=1)
-
-        RoomAllotment.objects.filter(booking = booking).update(booking_from=booking_from,
-                                                                booking_to=booking_to)
+                                                            purpose="WHY")
         return HttpResponseRedirect('/visitorhostel/')
     else:
         return HttpResponseRedirect('/visitorhostel/')
@@ -389,7 +380,7 @@ def edit_room_status(request):
         room_number = request.POST.get('room_number')
         room_status = request.POST.get('room_status')
         room=RoomDetail.objects.get(room_number=room_number)
-        RoomStatus.objects.filter(room_id=room).update(status=room_status)
+        RoomDetail.objects.filter(room_id=room).update(status=room_status)
         return HttpResponseRedirect('/visitorhostel/')
     else:
         return HttpResponseRedirect('/visitorhostel/')
