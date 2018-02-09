@@ -76,7 +76,7 @@ class BookingDetail(models.Model):
     intender = models.ForeignKey(User, on_delete=models.CASCADE)
     visitor_category = models.CharField(max_length=1, choices=VISITOR_CATEGORY)
     person_count = models.IntegerField(default=1)
-    purpose = models.TextField(blank=True)
+    purpose = models.TextField(default="Hi!")
     booking_from = models.DateField()
     booking_to = models.DateField()
     check_in = models.DateField(null=True, blank=True)

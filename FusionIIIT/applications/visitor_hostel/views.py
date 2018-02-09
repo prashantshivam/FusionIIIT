@@ -19,7 +19,6 @@ def visitorhostel(request):
     user = request.user
     user_detail=UserDetail.objects.get(name=user)
     user_designation=user_detail.designation
-    print(user_designation)
     available_rooms = {}
     # bookings for intender view
     if (user_designation == "Intender") :
@@ -61,7 +60,7 @@ def visitorhostel(request):
                   {'all_bookings' : all_bookings,
                    'inactive_bookings' : inactive_bookings,
                    'pending_bookings' : pending_bookings,
-                   #'active_bookings' : active_bookings,
+                   'active_bookings' : active_bookings,
                    'canceled_bookings' : canceled_bookings,
                    # 'all_rooms_status' : all_rooms_status,
                    'available_rooms' :available_rooms,
@@ -120,18 +119,22 @@ def request_booking(request):
         intender = request.POST.get('intender')
         user = User.objects.get(id=intender)
         booking_id = "VH"+str(datetime.datetime.now())
-        person_count=request.POST.get('numberofpeople')
+        category = request.POST.get('category')
+        person_count=request.POST.get('number-of-people')
         if person_count:
             person_count = person_count
         else:
             person_count = 1
-        purpose=request.POST.get('purposeofvisit')
+        purpose_of_visit=request.POST.get('purpose-of-visit')
+        print(purpose_of_visit)
         booking_from=request.POST.get('booking_from')
         booking_to=request.POST.get('booking_to')
-        BookingDetail.objects.create(purpose=purpose,
+        BookingDetail.objects.create(purpose=purpose_of_visit,
                                        intender=user,
                                        booking_from=booking_from,
-                                       booking_to=booking_to)
+                                       booking_to=booking_to,
+                                       visitor_category=category,
+                                       person_count=person_count)
 
         return HttpResponseRedirect('/visitorhostel/')
     else:

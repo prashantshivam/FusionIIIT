@@ -28,14 +28,15 @@ $('#request-booking-form-submit').on('click', function(event){
         url: '/visitorhostel/request-booking/',
         data: {
             'intender' : $('input[name="intender"]').val(),
+            'category' : $('input[name="visitor-category"]').val(),
             'csrfmiddlewaretoken': $('input[name="csrf"]').val(),
             'booking_from' : $('input[name="booking-from"]').val(),
             'booking_to' : $('input[name="booking-to"]').val(),
-            'numberofpeople' : $('input[name="number-of-people"]').val(),
-            'purposeofvisit' : $('textarea[name="purpose-of-visit"]').val(),
+            'number-of-people' : $('input[name="number-of-people"]').val(),
+            'purpose-of-visit' : $('input[name="purpose-of-visit"]').val(),
         },
         success: function(data) {
-            $('#request-booking-form').reset();
+            $('#request-booking-form')[0].reset();
         },
         error: function(data, err) {
             alert(err.message);
