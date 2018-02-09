@@ -25,31 +25,35 @@
             <div class="ui huge fluid vertical pointing menu"
                  style="max-width: 320px;">
 
-                <a class="item" data-tab="first" id="bookings">
+                <a class=" active item" data-tab="first" id="bookings">
                     Bookings
                     <i class="right floated chevron right icon"></i>
                 </a>
-                <form method="post" action="{% url 'visitorhostel:get_booking_form' %}">
-                    {% csrf_token %}
-                    <a class="item" data-tab="second" id="bookaroom" onclick="this.parentNode.submit()">
-                        Booking Form
-                        <i class="right floated chevron right icon"></i>
-                    </a>
-                </form>
+
+                   
+                <a class="item" data-tab="second" id="bookaroom">
+                    Booking Form
+                    <i class="right floated chevron right icon"></i>
+                </a>
+
                 <a class="item" data-tab="third" id="roomstatus">
                     Room Availability
                     <i class="right floated chevron right icon"></i>
                 </a>
 
+                {% if user_designation == 'VhIncharge' or user_designation == 'VhCaretaker' %}
                 <a class=" item" data-tab="fourth" id="bookameal">
                     Meals Record
                     <i class="right floated chevron right icon"></i>
                 </a>
+                {% endif %}
 
+                {% if user_designation == 'VhIncharge' or user_designation == 'VhCaretaker' %}
                 <a class="item" data-tab="fifth">
                     Inventory
                     <i class="right floated chevron right icon"></i>
                 </a>
+                {% endif %}
 
                 <a class="item" data-tab="sixth">
 
@@ -63,7 +67,7 @@
         <div class="eight wide column">
             {% comment %}The Details start here!{% endcomment %}
 
-            <div class="ui tab segment" data-tab="first">
+            <div class="ui active tab segment" data-tab="first">
                 {% block bookameal %}
                     {% include 'vhModule/bookings.html' %}
                 {% endblock %}

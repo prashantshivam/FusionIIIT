@@ -10,6 +10,12 @@ VISITOR_CATEGORY = (
     ('D', 'D'),
     )
 
+DESIGNATION = (
+    ('Intender', 'Intender'),
+    ('VhCaretaker', 'VhCaretaker'),
+    ('VhIncharge', 'VhIncharge')
+    )
+
 ROOM_TYPE = (
     ('SingleBed', 'SingleBed'),
     ('DoubleBed', 'DoubleBed'),
@@ -38,6 +44,10 @@ BOOKING_STATUS = (
     ("CheckedIn" , 'CheckedIn'),
     ("Complete", 'Complete')
     )
+
+class UserDetail(models.Model):
+    name= models.ForeignKey(User, on_delete=models.CASCADE)
+    designation = models.CharField(max_length=20, choices=DESIGNATION, default='Intender')
 
 
 class VisitorDetail(models.Model):

@@ -11,28 +11,38 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .forms import InventoryForm
 
+@login_required(login_url='/accounts/login/')
 def visitorhostel(request):
 
     # intenders
     intenders = User.objects.all()
     user = request.user
-
-    # bookings
-    all_bookings = BookingDetail.objects.all()
-    pending_bookings = BookingDetail.objects.filter(status = "Pending")
-    active_bookings = BookingDetail.objects.filter(status = "Confirmed")
-    inactive_bookings = BookingDetail.objects.filter(Q(status = "Cancelled") | Q(status = "Rejected") | Q(status="Complete"))
-    canceled_bookings = BookingDetail.objects.filter(status = "Canceled")
-    rejected_bookings = BookingDetail.objects.filter(status = 'Rejected')
-    print (pending_bookings)
-    # rooms info here
+    user_detail=UserDetail.objects.get(name=user)
+    user_designation=user_detail.designation
+    print(user_designation)
     available_rooms = {}
-    for booking in pending_bookings:
-        booking_from = booking.booking_from
-        booking_to = booking.booking_to
-        temp = booking_details(booking_from, booking_to)
-        available_rooms[booking.id] = temp
-    print (available_rooms)
+    # bookings for intender view
+    if (user_designation == "Intender") :
+        all_bookings = BookingDetail.objects.all()
+        pending_bookings = BookingDetail.objects.filter(status = "Pending", intender=user)
+        active_bookings = BookingDetail.objects.filter(status = "Confirmed", intender=user)
+        inactive_bookings = BookingDetail.objects.filter(Q(status = "Cancelled") | Q(status = "Rejected") | Q(status="Complete"), intender=user)
+        canceled_bookings = BookingDetail.objects.filter(status = "Canceled", intender=user)
+        rejected_bookings = BookingDetail.objects.filter(status = 'Rejected', intender=user)
+    else:  # booking for caretaker and incharge view
+        all_bookings = BookingDetail.objects.all()
+        pending_bookings = BookingDetail.objects.filter(status = "Pending")
+        active_bookings = BookingDetail.objects.filter(status = "Confirmed")
+        inactive_bookings = BookingDetail.objects.filter(Q(status = "Cancelled") | Q(status = "Rejected") | Q(status="Complete"))
+        canceled_bookings = BookingDetail.objects.filter(status = "Canceled")
+        rejected_bookings = BookingDetail.objects.filter(status = 'Rejected')
+
+        for booking in pending_bookings:
+            booking_from = booking.booking_from
+            booking_to = booking.booking_to
+            temp = booking_details(booking_from, booking_to)
+            available_rooms[booking.id] = temp
+    #print (available_rooms)
 
     # inventory data
     inventory = Inventory.objects.all()
@@ -62,7 +72,8 @@ def visitorhostel(request):
                    'inventory_bill' : inventory_bill,
                    # 'meals' : meals,
                    #'intenders' : intenders,
-                   'user' : user})
+                   'user' : user,
+                   'user_designation': user_designation})
 
 # Get methods for bookings
 
