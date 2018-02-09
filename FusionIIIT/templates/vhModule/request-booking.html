@@ -113,15 +113,16 @@
                 <div class="field">
                     <label>Purpose Of Visit</label>
                     <div class="ui fluid input">
-                        <input rows="2" name="purpose-of-visit" required></textarea>
+                        <input rows="2" name="purpose-of-visit" required=""></textarea>
                     </div>
                 </div>
                 <input type="hidden" name="csrf" value="{{ csrf_token }}">
                 <div class="field">
                     <label></label>
-                    <div class="ui large primary button right floated" id="request-booking-form-submit">
+                    <button class="ui large primary button right floated"
+                        id="request-booking-form-submit">
                         Submit
-                    </div>
+                    </button>
                 </div>
                 <br>
                 <br>
