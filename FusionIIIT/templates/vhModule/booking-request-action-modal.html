@@ -58,7 +58,7 @@
                         <input name="category-{{ booking.id }}" type="hidden" required="">
                         <i class="dropdown icon"></i>
 
-                        <div class="default text">{{ booking.visitor_category}}</div>
+                        <div class="default text">{{ booking.visitor_category }}</div>
 
                         <div class="menu">
                             <div class="item" data-value="A">
@@ -90,7 +90,8 @@
 
                 <div class="field">
                     <label>Rooms</label>
-                    <select name="alloted-rooms" multiple="" class="ui fluid dropdown">
+                    {{ booking.id }}
+                    <select name="alloted-rooms-{{ booking.id }}" multiple="" class="ui fluid dropdown">
                         {% for key, values in available_rooms.items %}
                             {% if key == booking.id %}
                                 {% for room in values %}

@@ -1,5 +1,11 @@
 {% load static %}
 {% block checkout %}
+
+
+{% for booking in active_bookings %}
+{% if booking.status == 'CheckedIn' %}
+
+<div class="ui modal" id="check-out-modal-{{ booking.id }}">
     <div class="ui pointing secondary menu">
         <a class="active item" data-tab="checkout">
             Guest Check-Out
@@ -17,36 +23,38 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>Name </label>
-                                <input  type="text" value=" {{context.visitor}} " readonly >
+                                <input  type="text" value=" {{ booking.intender }} " readonly >
                             </div>
 
                             <div class="field">
                                 <label>email</label>
-                                <input  type="email" value=" {{context.v_id}} " readonly >
+                                <input  type="email" value=" {{ booking.intender.email }} " readonly >
                             </div>
                         </div>
 
 
-
+                        {% for key, value in bills.items %}
+                        {% if key == booking.id %}
                         <div class="two fields">
                             <div class="field">
                                 <label>Room Bill </label>
-                                <input  type="text" value=" {{context.room_bill}} " readonly >
+                                <input  type="text" value=" {{ value.room_bill }} " readonly >
                             </div>
 
                             <div class="field">
                                 <label>Mess Bill</label>
-                                <input  type="text" value=" {{context.mess_bill}} " readonly >
+                                <input  type="text" value=" {{ value.mess_bill }} " readonly >
                             </div>
                         </div>
-
+                        {% endif %}
+                        {% endfor %}
 
 
 
                         <div class="field">
                             <label>Total Amount</label>
                             <div class="ui input">
-                                <input type="text" value=" {{context.total_bill}} " readonly>
+                                <input type="text" value=" {{ bills.total_bill }} " readonly>
                             </div>
                         </div>
                     </div>
@@ -109,36 +117,25 @@
                                 </thead>
 
                                 <tbody>
-                                {% for e in visitor_info %}
+                                    {% for vis in booking.visitor.all %}
+                                        {{ vis }}
+                                    {% endfor %}
                                 <tr>
                                     <td>
 
-                                        {{ e.visitor_name }}
+
                                     </td>
 
                                     <td>
-                                       {{ e.visitor_email }}
+
                                     </td>
 
                                     <td>
-                                       {{ e.visitor_phone }}
+
                                     </td>
-                                <!--</tr>-->
 
-                                <!--<tr>-->
-                                    <!--<td>-->
-                                        <!--10<sup>th</sup> Aug'17-->
-                                    <!--</td>-->
-
-                                    <!--<td>-->
-                                        <!--Lunch-->
-                                    <!--</td>-->
-
-                                    <!--<td>-->
-                                        <!--&#8377; 50-->
-                                    <!--</td>-->
                                 </tr>
-                                {% endfor %}
+
                                 </tbody>
                             </table>
 
@@ -220,5 +217,9 @@
             </form>
         </div>
     </div>
+</div>
+{% endif %}
+{% endfor %}
+
 {% endblock %}
 

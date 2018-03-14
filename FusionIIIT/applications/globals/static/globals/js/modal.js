@@ -58,3 +58,9 @@ function checkInModal (id) {
         $('#check-in-modal-'.concat(id)).modal('show');
     });
 }
+
+function checkOutModal(id) {
+    $(document).ready(function() {
+        $('#check-out-modal-'.concat(id)).modal('show');
+    });
+}

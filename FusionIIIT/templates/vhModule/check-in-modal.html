@@ -28,7 +28,7 @@
              style="padding-left: 3.5%;
                 padding-right: 3.5%;">
 
-            <form class="ui large form">
+            <form class="ui large form" id="visitor-detail-{{ booking.id }}-1">
 
                 <div id="checkin">
 
@@ -37,13 +37,14 @@
                             <div class="field">
                                 <label>Name </label>
                                 <div class="ui search selection dropdown">
-                                    <input name="visitor_name" type="hidden">
+                                    <input name="visitor-name-{{ booking.id }}-1" type="hidden">
                                     <i class="dropdown icon"></i>
 
                                     <div class="default text">Select</div>
                                     <div class="menu">
+                                        {{ previous_visitor }}
                                         {% for visitor in previous_visitors %}
-                                            <div class="item" data-value="1">
+                                            <div class="item" data-value="{{ visitor.visitor_name }}">
                                                 {{ visitor.visitor_name }}
                                             </div>
                                         {% endfor %}
@@ -53,7 +54,7 @@
 
                             <div class="field">
                                 <label>Email</label>
-                                <input placeholder="Email" type="email">
+                                <input placeholder="Email" type="email" name="email-{{ booking.id }}-1">
                             </div>
                         </div>
                     </div>
@@ -62,39 +63,39 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>Phone</label>
-                                <input placeholder="Phone" type="tel">
+                                <input placeholder="Phone" type="tel" name="phone-{{ booking.id }}-1">
                             </div>
                         </div>
                     </div>
 
-                    <div class="two fields">
+<!--                     <div class="two fields">
                         <div class="field">
                             <label>Arrival Date</label>
                             <div class="ui calendar" id="rangestart">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="Arrival Date">
+                                    <input type="text" placeholder="Arrival Date" name="arrival-{{ booking.id }}-1">
                                 </div>
                             </div>
                         </div>
 
                         <div class="field">
                             <label>Arrival Time:</label>
-                            <input placeholder="time" type="time">
+                            <input placeholder="time" type="time" name="time-{{ booking.id }}-1">
                         </div>
 
-                    </div>
+                    </div> -->
 
                     <div class="field">
                         <label>Address:</label>
                         <div class="ui fluid input">
-                            <textarea class="ui textarea" rows="2"></textarea>
+                            <input class="ui textarea" name="address-{{ booking.id }}-1">
                         </div>
                     </div>
 
                     <div class="field">
                         <label><br></label>
-                        <div class="ui large right floated primary button" id="checkin-submit">
+                        <div class="ui large right floated primary button" id="checkin-submit" onclick="submit_visitor_details('{{ booking.id }}', 1)">
                             Submit
                         </div>
                     </div>
@@ -117,7 +118,7 @@
              style="padding-left: 3.5%;
                 padding-right: 3.5%;">
 
-            <form class="ui large form">
+            <form class="ui large form" id="visitor-detail-{{ booking.id }}-{{ i }}">
 
                 <div id="checkin">
 
@@ -126,13 +127,13 @@
                             <div class="field">
                                 <label>Name </label>
                                 <div class="ui search selection dropdown">
-                                    <input name="visitor_name" type="hidden">
+                                    <input name="visitor-name-{{ booking.id }}-{{ i }}" type="hidden">
                                     <i class="dropdown icon"></i>
 
                                     <div class="default text">Select</div>
                                     <div class="menu">
                                         {% for visitor in previous_visitors %}
-                                            <div class="item" data-value="1">
+                                            <div class="item" data-value="{{ visitor.visitor_name }}">
                                                 {{ visitor.visitor_name }}
                                             </div>
                                         {% endfor %}
@@ -142,7 +143,7 @@
 
                             <div class="field">
                                 <label>Email</label>
-                                <input placeholder="Email" type="email">
+                                <input placeholder="Email" type="email" name="email-{{ booking.id }}-{{ i }}">
                             </div>
                         </div>
                     </div>
@@ -151,38 +152,38 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>Phone</label>
-                                <input placeholder="Phone" type="tel">
+                                <input placeholder="Phone" type="tel" name="phone-{{ booking.id }}-{{ i }}">
                             </div>
                         </div>
                     </div>
 
-                    <div class="two fields">
+<!--                     <div class="two fields">
                         <div class="field">
                             <label>Arrival Date</label>
-                            <div class="ui calendar" id="rangestart">
+                            <div class="ui calendar" id="rangestart2">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="Arrival Date">
+                                    <input type="text" placeholder="Arrival Date" name="arrival-{{ booking.id }}-{{ i }}">
                                 </div>
                             </div>
                         </div>
 
                         <div class="field">
                             <label>Arrival Time:</label>
-                            <input placeholder="time" type="time">
+                            <input placeholder="time" type="time" name="time-{{ booking.id }}-{{ i }}">
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="field">
                         <label>Address:</label>
                         <div class="ui fluid input">
-                            <textarea class="ui textarea" rows="2"></textarea>
+                            <input class="ui textarea" name="address-{{ booking.id }}-{{ i }}">
                         </div>
                     </div>
 
                     <div class="field">
                         <label><br></label>
-                        <div class="ui large right floated primary button" id="checkin-submit">
+                        <div class="ui large right floated primary button" id="checkin-submit" onclick="submit_visitor_details('{{ booking.id }}', '{{ i }}')">
                             Submit
                         </div>
                     </div>
