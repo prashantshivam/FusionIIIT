@@ -207,15 +207,16 @@ function submit_room_status(id){
 
 // Confirm Booking
 
-$('#confirm-booking').click(function(event){
-    event.preventDefault();
+function confirm_booking (id) {
+
+    id = id;
     $.ajax({
         type: 'POST',
         url: '/visitorhostel/confirm-booking/',
         data: {
-            'booking-id' : $('input[name="booking-id"]').val(),
-            'csrfmiddlewaretoken': $('input[name="csrf"]').val(),
-            'category' : $('input[name="category"]').val(),
+            'booking-id' : $('input[name=booking-id-'+id+']').val(),
+            'csrfmiddlewaretoken': $('input[name=csrf]').val(),
+            'category' : $('input[name=category-'+id+']').val(),
         },
         success: function(data) {
             alert("Success");
@@ -224,27 +225,28 @@ $('#confirm-booking').click(function(event){
             alert(err.message);
         }
     });
-});
+};
 
 // Reject Booking
 
-$('#reject-booking').click(function(event){
-    event.preventDefault();
+function reject_booking (id) {
+
+    id = id;
     $.ajax({
         type: 'POST',
         url: '/visitorhostel/reject-booking/',
         data: {
-            'booking-id' : $('input[name="booking-id"]').val(),
+            'booking-id' : $('input[name=booking-id-'+id+']').val(),
             'csrfmiddlewaretoken': $('input[name="csrf"]').val(),
         },
         success: function(data) {
-            window.reload()
+            alert("Rejected");
         },
         error: function(data, err) {
             alert(err.message);
         }
     });
-});
+};
 
 // Check In
 

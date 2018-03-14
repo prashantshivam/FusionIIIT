@@ -7,7 +7,7 @@
         Requests
     </a>
 
-    <a class="item" data-tab="active-bookings" href="{% url 'visitorhostel:get_booking_requests' %}">
+    <a class="item" data-tab="active-bookings">
         Active Bookings
     </a>
 
@@ -73,8 +73,8 @@
 
                     <tbody>
                         {% for booking in active_bookings %}
-                        <tr onclick=bookingDetailsModal('{{ booking.id }}')>
-                            <td>
+                        <tr>
+                            <td onclick=bookingDetailsModal('{{ booking.id }}')>
                                 <h4 class="ui image header">
                                     <div class="content">
                                         {{ booking.intender }}
@@ -84,11 +84,13 @@
                                     </div>
                                 </h4>
                             </td>
-                            <td>{{ booking.booking_from }}</td>
-                            <td>{{ booking.booking_to }}</td>
-                            <td>{{ booking.visitor_category }}</td>
+                            <td onclick=bookingDetailsModal('{{ booking.id }}')>{{ booking.booking_from }}</td>
+                            <td onclick=bookingDetailsModal('{{ booking.id }}')>{{ booking.booking_to }}</td>
+                            <td onclick=bookingDetailsModal('{{ booking.id }}')>{{ booking.visitor_category }}</td>
                             <td>
-
+                                <div class="ui large green button right floated" id="check-in" onclick="checkInModal('{{ booking.id }}')">
+                                    Check In
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -138,10 +140,13 @@
             </div>
         </div>
     </div>
+</div>
 
 
 {% include 'vhModule/check-in-modal.html' %}
 
 {% include 'vhModule/booking-request-action-modal.html' %}
+
+{% include 'vhModule/booking-details.html' %}
 
 {% endblock %}

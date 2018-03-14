@@ -1,18 +1,29 @@
 {% load static %}
 {% block checkin %}
 
-<div class="ui modal" id="checkInModal">
+
+{% for booking in active_bookings %}
+<div class="ui modal" id="check-in-modal-{{ booking.id }}">
   <div class="header">Guest Check In</div>
   <div class="scrolling content">
 
     <div class="ui pointing secondary menu">
-        <a class="active item" data-tab="checkin">
-            Visitor Check-In
-        </a>
+
+                <a class="item active" data-tab="details-1">
+                    Visitor 1 Details
+                </a>
+    {% for key, values in visitors.items %}
+        {% if key == booking.id %}
+            {% for i in values %}
+                <a class="item" data-tab="details-{{ i }}">
+                    Visitor {{ i }} Details
+                </a>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
     </div>
 
-    <div class="ui active tab" data-tab="checkin">
-
+    <div class="ui tab active" data-tab="details-1">
         <div class="ui vertical stripe team segment"
              style="padding-left: 3.5%;
                 padding-right: 3.5%;">
@@ -20,7 +31,6 @@
             <form class="ui large form">
 
                 <div id="checkin">
-                    {% comment %}The form row starts here!{% endcomment %}
 
                     <div class="field">
                         <div class="two fields">
@@ -32,9 +42,9 @@
 
                                     <div class="default text">Select</div>
                                     <div class="menu">
-                                        {% for visitor in active_bookings %}
+                                        {% for visitor in previous_visitors %}
                                             <div class="item" data-value="1">
-                                                {{ visitor.visitor.visitor_name }}
+                                                {{ visitor.visitor_name }}
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -54,16 +64,10 @@
                                 <label>Phone</label>
                                 <input placeholder="Phone" type="tel">
                             </div>
-
-                            <div class="field">
-                                <label>Number Of People</label>
-                                    <input name="noOfPeople" type="number">
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <div class="three fields">
+                    <div class="two fields">
                         <div class="field">
                             <label>Arrival Date</label>
                             <div class="ui calendar" id="rangestart">
@@ -79,13 +83,6 @@
                             <input placeholder="time" type="time">
                         </div>
 
-                        <div class="field">
-                            {% comment %}number of rooms  starts here!{% endcomment %}
-                            <label>No Of Rooms:</label>
-                            <div class="ui search selection">
-                                <input name="rooms" type="number">
-                            </div>
-                        </div>
                     </div>
 
                     <div class="field">
@@ -109,6 +106,99 @@
 
         </div>
     </div>
+
+
+    {% for key, values in visitors.items %}
+        {% if key == booking.id %}
+            {% for i in values %}
+
+    <div class="ui tab" data-tab="details-{{ i }}">
+        <div class="ui vertical stripe team segment"
+             style="padding-left: 3.5%;
+                padding-right: 3.5%;">
+
+            <form class="ui large form">
+
+                <div id="checkin">
+
+                    <div class="field">
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Name </label>
+                                <div class="ui search selection dropdown">
+                                    <input name="visitor_name" type="hidden">
+                                    <i class="dropdown icon"></i>
+
+                                    <div class="default text">Select</div>
+                                    <div class="menu">
+                                        {% for visitor in previous_visitors %}
+                                            <div class="item" data-value="1">
+                                                {{ visitor.visitor_name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label>Email</label>
+                                <input placeholder="Email" type="email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Phone</label>
+                                <input placeholder="Phone" type="tel">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Arrival Date</label>
+                            <div class="ui calendar" id="rangestart">
+                                <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input type="text" placeholder="Arrival Date">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Arrival Time:</label>
+                            <input placeholder="time" type="time">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>Address:</label>
+                        <div class="ui fluid input">
+                            <textarea class="ui textarea" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label><br></label>
+                        <div class="ui large right floated primary button" id="checkin-submit">
+                            Submit
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <br>
+            <div class="ui divider"></div>
+        </div>
+    </div>
+                {% endfor %}
+        {% endif %}
+    {% endfor %}
+
 </div>
 </div>
+
+{% endfor %}
 {% endblock %}

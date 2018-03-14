@@ -25,6 +25,12 @@ def visitorhostel(request):
         all_bookings = BookingDetail.objects.all()
         pending_bookings = BookingDetail.objects.filter(status = "Pending", intender=user)
         active_bookings = BookingDetail.objects.filter(status = "Confirmed", intender=user)
+
+        visitors = {}
+        for booking in active_bookings:
+            temp = range(2, booking.person_count + 1)
+            visitors[booking.id] = temp
+
         inactive_bookings = BookingDetail.objects.filter(Q(status = "Cancelled") | Q(status = "Rejected") | Q(status="Complete"), intender=user)
         canceled_bookings = BookingDetail.objects.filter(status = "Canceled", intender=user)
         rejected_bookings = BookingDetail.objects.filter(status = 'Rejected', intender=user)
@@ -32,6 +38,12 @@ def visitorhostel(request):
         all_bookings = BookingDetail.objects.all()
         pending_bookings = BookingDetail.objects.filter(status = "Pending")
         active_bookings = BookingDetail.objects.filter(status = "Confirmed")
+
+        visitors = {}
+        for booking in active_bookings:
+            temp = range(2, booking.person_count + 1)
+            visitors[booking.id] = temp
+
         inactive_bookings = BookingDetail.objects.filter(Q(status = "Cancelled") | Q(status = "Rejected") | Q(status="Complete"))
         canceled_bookings = BookingDetail.objects.filter(status = "Canceled")
         rejected_bookings = BookingDetail.objects.filter(status = 'Rejected')
@@ -56,6 +68,8 @@ def visitorhostel(request):
 
     # edit_room_statusForm=RoomStatus.objects.filter(Q(status="UnderMaintenance") | Q(status="Available"))
 
+    previous_visitors = VisitorDetail.objects.all()
+
     return render(request, "vhModule/visitorhostel.html",
                   {'all_bookings' : all_bookings,
                    'inactive_bookings' : inactive_bookings,
@@ -70,8 +84,10 @@ def visitorhostel(request):
                    'inventory' : inventory,
                    'inventory_bill' : inventory_bill,
                    # 'meals' : meals,
-                   #'intenders' : intenders,
+                   'intenders' : intenders,
                    'user' : user,
+                   'visitors' : visitors,
+                   'previous_visitors' : previous_visitors,
                    'user_designation': user_designation})
 
 # Get methods for bookings
@@ -174,7 +190,7 @@ def reject_booking(request):
     if request.method == 'POST':
         booking_id = request.POST.get('booking-id')
         remark = request.POST.get('remark')
-        BookingDetail.objects.filter(id=booking_id).update(status='Rejected', remark=remark)
+        BookingDetail.objects.filter(id=booking_id).update(status="Rejected", remark=remark)
         return HttpResponseRedirect('/visitorhostel/')
     else:
         return HttpResponseRedirect('/visitorhostel/')

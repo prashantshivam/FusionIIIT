@@ -33,16 +33,6 @@ function modalGoldmedal(){
     });
 }
 
-
-function modalCheckIn(){
-    $(document).ready(function() {
-        $('#checkInModal')
-          .modal('show')
-        ;
-    });
-}
-
-
 function modalAddItem(){
     $(document).ready(function() {
         $('#addItemModal')
@@ -59,6 +49,12 @@ function bookingRequestModal(id){
 
 function bookingDetailsModal(id){
     $(document).ready(function() {
-        ('#booking-details-'.concat(id)).modal('show');
+        $('#booking-details-'.concat(id)).modal('show');
+    });
+}
+
+function checkInModal (id) {
+    $(document).ready(function() {
+        $('#check-in-modal-'.concat(id)).modal('show');
     });
 }
