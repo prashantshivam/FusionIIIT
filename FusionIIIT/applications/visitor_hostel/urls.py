@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^update-inventory/', views.update_inventory, name = 'update_inventory'),
     url(r'^edit-room-status/', views.edit_room_status, name = 'edit_room_status'),
     url(r'^booking-details/', views.booking_details, name = 'booking_details'),
-
+    url(r'^forward-booking/', views.forward_booking, name = 'forward_booking'),
 ]

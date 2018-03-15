@@ -40,7 +40,7 @@ $('#request-booking-form-submit').on('click', function(event){
             $('#request-booking-form')[0].reset();
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 });
@@ -68,7 +68,7 @@ $('.bookameal-submit').click(function(event){
             alert('Success');
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 });
@@ -102,7 +102,7 @@ function submit_inventory_form(id){
             $('#submit-'.concat(id)).fadeToggle();
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 };
@@ -134,7 +134,7 @@ $('#add-more-items-inventory').click(function(event){
             $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value = "";
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 
@@ -165,7 +165,7 @@ $('#add-item-form-submit').click(function(event){
             $('.reset-this-form')[0].children[2].children[2].children[1].children[0].value = "";
         },
         error: function(xhr, data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
 
     });
@@ -201,7 +201,7 @@ function submit_room_status(id){
             $('#submit-'.concat(id)).fadeToggle();
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 };
@@ -224,7 +224,7 @@ function confirm_booking (id) {
             alert("Success");
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 };
@@ -245,7 +245,7 @@ function reject_booking (id) {
             alert("Rejected");
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 };
@@ -270,7 +270,7 @@ $("#update-inventory-submit").click(function(e){
             alert("Success");
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 });
@@ -295,15 +295,28 @@ function submit_visitor_details (id, i) {
             alert("Success");
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
         }
     });
 }
 
 // Check Out
 
-function check_out () {
-    $("#check-out-view").show();
+function check_out (id) {
+    $.ajax({
+        type: 'POST',
+        url: '/visitorhostel/check-out/',
+        data: {
+            'csrfmiddlewaretoken' : $('input[name="csrf"]').val(),
+            'id' : id,
+        },
+        success: function(data) {
+            alert("Checked Out");
+        },
+        error: function(data, err) {
+            alert('Something missing! PLease refill the form');
+        }
+    });
 }
 
 function find_available_rooms () {
@@ -339,7 +352,27 @@ function find_available_rooms () {
             $('#replace-this-div').html(data);
         },
         error: function(data, err) {
-            alert(err.message);
+            alert('Something missing! PLease refill the form');
+        }
+    });
+}
+
+// Forward Booking
+
+function forward_booking (id) {
+    id=id;
+    $.ajax({
+        type: 'POST',
+        url: '/visitorhostel/forward-booking/',
+        data: {
+            'csrfmiddlewaretoken' : $('input[name="csrf"]').val(),
+            'id' : id,
+        },
+        success: function(data) {
+            alert("Forwarded")
+        },
+        error: function(data, err) {
+            alert('Something missing! PLease refill the form');
         }
     });
 }

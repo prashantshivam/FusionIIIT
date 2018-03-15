@@ -46,17 +46,17 @@
                                 <input  type="text" value=" {{ value.mess_bill }} " readonly >
                             </div>
                         </div>
+                        <div class="field">
+                            <label>Total Amount</label>
+                            <div class="ui input">
+                                <input type="text" value=" {{ value.total_bill }} " readonly>
+                            </div>
+                        </div>
                         {% endif %}
                         {% endfor %}
 
 
 
-                        <div class="field">
-                            <label>Total Amount</label>
-                            <div class="ui input">
-                                <input type="text" value=" {{ bills.total_bill }} " readonly>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="ui accordion field">
@@ -117,24 +117,22 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for vis in booking.visitor.all %}
-                                        {{ vis }}
-                                    {% endfor %}
+                                {% for visitor in booking.visitor.all %}
                                 <tr>
                                     <td>
-
-
+                                        {{ visitor.visitor_name }}
                                     </td>
 
                                     <td>
-
+                                        {{ visitor.visitor_email }}
                                     </td>
 
                                     <td>
-
+                                        {{ visitor.visitor_phone }}
                                     </td>
 
                                 </tr>
+                                {% endfor %}
 
                                 </tbody>
                             </table>
@@ -160,35 +158,22 @@
                                 </thead>
 
                                 <tbody>
-                                {% for r in rooms %}
+                                {% for room in booking.rooms.all %}
                                 <tr>
                                     <td>
 
-                                        {{ r.room_type }}
+                                        {{ room.room_type }}
                                     </td>
 
                                     <td>
-                                       {{ r.room_number }}
+                                       {{ room.room_number }}
                                     </td>
 
                                     <td>
-                                       {{ r.room_floor }}
+                                       {{ room.room_floor }}
                                     </td>
-                                <!--</tr>-->
-
-                                <!--<tr>-->
-                                    <!--<td>-->
-                                        <!--10<sup>th</sup> Aug'17-->
-                                    <!--</td>-->
-
-                                    <!--<td>-->
-                                        <!--Lunch-->
-                                    <!--</td>-->
-
-                                    <!--<td>-->
-                                        <!--&#8377; 50-->
-                                    <!--</td>-->
                                 </tr>
+
                                 {% endfor %}
                                 </tbody>
                             </table>
@@ -200,18 +185,18 @@
 
                     <div class="three fields">
                         <div class="ten wide field"></div>
-                        <div class="two wide field">
+                        <div class="six wide field">
                             <label><br></label>
-                            <div class="ui large right floated button">
+                            <div class="ui large green right floated button" onclick="check_out('{{ booking.id }}')">
                                 Settle
                             </div>
                         </div>
-                        <div class="two wide field">
+                        <!-- <div class="two wide field">
                             <label><br></label>
                             <div class="ui large center floated primary button">
                                 Print
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </form>

@@ -52,7 +52,7 @@
             <div class="three fields">
 
                 <div class="field">
-                    <label>Category:</label>
+                    <label>Category (required*)</label>
 
                     <div class="ui fluid search selection dropdown">
                         <input name="category-{{ booking.id }}" type="hidden" required="">
@@ -89,8 +89,7 @@
                 </div>
 
                 <div class="field">
-                    <label>Rooms</label>
-                    {{ booking.id }}
+                    <label>Rooms (required*)</label>
                     <select name="alloted-rooms-{{ booking.id }}" multiple="" class="ui fluid dropdown">
                         {% for key, values in available_rooms.items %}
                             {% if key == booking.id %}
@@ -114,7 +113,7 @@
         <input type="hidden" name="booking-id-{{ booking.id }}" value="{{ booking.id }}"">
         <input type="hidden" name="csrf" value="{{ csrf_token }}">
 
-        {% if user_designation == 'VhIncharge' or user_designation == 'VhCaretaker' %}
+        {% if user_designation == 'VhIncharge'  %}
         <div class="field">
             <label></label>
             <div class="ui large red button right floated" id="reject-booking" onclick="reject_booking('{{ booking.id }}')">
@@ -123,6 +122,18 @@
             <div class="ui large green button right floated" id="confirm-booking" onclick="confirm_booking('{{ booking.id }}')">
                 Confirm
             </div>
+            <div class="ui large green button right floated" id="farward-booking" onclick="forward_booking('{{ booking.id }}')">
+                Forward
+            </div>
+        </div>
+        {% endif %}
+        {% if user_designation == 'VhCaretaker' and booking.status == "Forward" %}
+        <div class="field">
+            <label></label>
+            <div class="ui large green button right floated" id="confirm-booking" onclick="confirm_booking('{{ booking.id }}')">
+                Confirm
+            </div>
+
         </div>
         {% endif %}
 

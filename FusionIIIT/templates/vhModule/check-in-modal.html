@@ -35,21 +35,8 @@
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
-                                <label>Name </label>
-                                <div class="ui search selection dropdown">
-                                    <input name="visitor-name-{{ booking.id }}-1" type="hidden">
-                                    <i class="dropdown icon"></i>
-
-                                    <div class="default text">Select</div>
-                                    <div class="menu">
-                                        {{ previous_visitor }}
-                                        {% for visitor in previous_visitors %}
-                                            <div class="item" data-value="{{ visitor.visitor_name }}">
-                                                {{ visitor.visitor_name }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                <label>Name (required*)</label>
+                                <input name="visitor-name-{{ booking.id }}-1" type="text">
                             </div>
 
                             <div class="field">
@@ -62,8 +49,13 @@
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
-                                <label>Phone</label>
+                                <label>Phone (required*)</label>
                                 <input placeholder="Phone" type="tel" name="phone-{{ booking.id }}-1">
+                            </div>
+
+                            <div class="field">
+                                <label>Organization</label>
+                                <input placeholder="Organization" type="text" name="organization-{{ booking.id }}-1">
                             </div>
                         </div>
                     </div>
@@ -125,20 +117,8 @@
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
-                                <label>Name </label>
-                                <div class="ui search selection dropdown">
-                                    <input name="visitor-name-{{ booking.id }}-{{ i }}" type="hidden">
-                                    <i class="dropdown icon"></i>
-
-                                    <div class="default text">Select</div>
-                                    <div class="menu">
-                                        {% for visitor in previous_visitors %}
-                                            <div class="item" data-value="{{ visitor.visitor_name }}">
-                                                {{ visitor.visitor_name }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                <label>Name (required*)</label>
+                                <input name="visitor-name-{{ booking.id }}-1" type="text">
                             </div>
 
                             <div class="field">
@@ -151,7 +131,7 @@
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
-                                <label>Phone</label>
+                                <label>Phone (required*)</label>
                                 <input placeholder="Phone" type="tel" name="phone-{{ booking.id }}-{{ i }}">
                             </div>
                         </div>

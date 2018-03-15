@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .forms import InventoryForm
+from applications.globals.models import *
 
 @login_required(login_url='/accounts/login/')
 def visitorhostel(request):
@@ -17,13 +18,15 @@ def visitorhostel(request):
     # intenders
     intenders = User.objects.all()
     user = request.user
-    user_detail=UserDetail.objects.get(name=user)
-    user_designation=user_detail.designation
+    user_detail=ExtraInfo.objects.get(user=user)
+    print(user_detail)
+    user_designation=user_detail.designation.name
+    print(type(user_designation))
     available_rooms = {}
     # bookings for intender view
     if (user_designation == "Intender") :
         all_bookings = BookingDetail.objects.all()
-        pending_bookings = BookingDetail.objects.filter(status = "Pending", intender=user)
+        pending_bookings = BookingDetail.objects.filter(Q(status = "Pending") | Q(status="Forward"), intender=user)
         active_bookings = BookingDetail.objects.filter(status = "Confirmed", intender=user)
         print (active_bookings, "active")
 
@@ -32,13 +35,13 @@ def visitorhostel(request):
             temp = range(2, booking.person_count + 1)
             visitors[booking.id] = temp
 
-        inactive_bookings = BookingDetail.objects.filter(Q(status = "Cancelled") | Q(status = "Rejected") | Q(status="Complete"), intender=user)
+        inactive_bookings = BookingDetail.objects.filter(Q(status = "Cancelled") | Q(status = "Rejected") | Q(status="Complete"), booking_to__lte = datetime.datetime.today(), intender=user)
         canceled_bookings = BookingDetail.objects.filter(status = "Canceled", intender=user)
         rejected_bookings = BookingDetail.objects.filter(status = 'Rejected', intender=user)
     else:  # booking for caretaker and incharge view
         all_bookings = BookingDetail.objects.all()
-        pending_bookings = BookingDetail.objects.filter(status = "Pending")
-        active_bookings = BookingDetail.objects.filter(Q(status = "Confirmed") | Q(status = "CheckedIn"))
+        pending_bookings = BookingDetail.objects.filter(Q(status = "Pending") | Q(status="Forward"))
+        active_bookings = BookingDetail.objects.filter(Q(status = "Confirmed") | Q(status = "CheckedIn"), booking_to__gte = datetime.datetime.today())
 
         visitors = {}
         for booking in active_bookings:
@@ -92,7 +95,7 @@ def visitorhostel(request):
                         room_bill=room_bill+days*400
                     else :
                         room_bill=room_bill+days*500
-            elif category=='C':
+            elif category =='C':
                 for i in rooms:
                     if i.room_type=='SingleBed':
                         room_bill=room_bill+days*800
@@ -106,6 +109,28 @@ def visitorhostel(request):
                         room_bill=room_bill+days*1600
 
             mess_bill = 0
+            for visitor in booking.visitor.all() :
+                meal = MealRecord.objects.filter(visitor=visitor)
+
+                mess_bill1 = 0
+                for m in meal:
+                    print (m.meal_date, m.visitor , "m")
+                    if m.morning_tea == True:
+                        mess_bill1=mess_bill1+10
+                    if m.eve_tea == True:
+                        mess_bill1=mess_bill1+10
+                    if m.breakfast == True:
+                        mess_bill1=mess_bill1+50
+                    if m.lunch == True:
+                        mess_bill1=mess_bill1+100
+                    if m.dinner == True:
+                        mess_bill1=mess_bill1+100
+
+                    if mess_bill1==270:
+                        mess_bill=mess_bill+225
+                    else:
+                        mess_bill=mess_bill + mess_bill1
+                print (mess_bill, "bill")
 
             total_bill = mess_bill + room_bill
 
@@ -276,44 +301,12 @@ def check_out(request):
         if request.method =='POST' :
             id=request.POST.get('id')
             print (id)
-            booking = BookingDetail.objects.get(id=id)
-            visitor_info=booking.visitor.all()
-            i=visitor_info[0]
-            rooms=booking.rooms.all()
-            BookingDetail.objects.filter(id=id).update(check_out=datetime.datetime.today())
-            days=(datetime.date.today() - booking.check_in).days
-            category=booking.visitor_category
-            person=booking.person_count
-            for room in rooms:
-                RoomDetail.objects.filter(id=room.id).update(room_status='Available')
+            BookingDetail.objects.filter(id=id).update(check_out=datetime.datetime.today(),status="Complete")
+
 
             # for visitors in visitor_info:
 
 
-            room_bill=0
-
-            if category =='A':
-                room_bill=0
-            elif category== 'B':
-                for i in rooms:
-                    if i.room_type=='SingleBed':
-                        room_bill=room_bill+days*400
-                    else :
-                        room_bill=room_bill+days*500
-            elif category=='C':
-                for i in rooms:
-                    if i.room_type=='SingleBed':
-                        room_bill=room_bill+days*800
-                    else :
-                        room_bill=room_bill+days*1000
-            else:
-                for i in rooms:
-                    if i.room_type=='SingleBed':
-                        room_bill=room_bill+days*1400
-                    else :
-                        room_bill=room_bill+days*1600
-
-            mess_bill=0
             #meal=Meal.objects.all().filter(visitor=v_id).distinct()
             #print(meal)
             #for m in meal:
@@ -337,11 +330,8 @@ def check_out(request):
             # print(type(v_id))
             # print(book_room[0])
             #RoomStatus.objects.filter(book_room=book_room[0]).update(status="Available",book_room='')
-            total_bill=mess_bill + room_bill
 
-            context = {'mess_bill':mess_bill,'room_bill':room_bill, 'total_bill':total_bill}
-            print(context)
-            return render(request, "vhModule/visitorhostel.html" , { 'context' : context,'visitor_info': visitor_info,'rooms':rooms})
+            return HttpResponseRedirect('/visitorhostel/')
         else :
             return HttpResponseRedirect('/visitorhostel/')
 
@@ -358,7 +348,7 @@ def record_meal(request):
             booking_id = request.POST.get('booking')
             booking = BookingDetail.objects.get(id = booking_id)
             visitor=VisitorDetail.objects.get(id=id)
-            date_1=datetime.datetime.now()
+            date_1=datetime.datetime.today()
             food=request.POST.getlist('food[]')
             print(food)
             # print(request.POST)
@@ -395,7 +385,20 @@ def record_meal(request):
             else:
                 person = 1
 
-            MealRecord.objects.create(visitor=visitor,
+            try:
+                meal = MealRecord.objects.get(visitor=visitor, booking=booking, meal_date = date_1)
+            except:
+                meal = False
+
+            if meal:
+                meal.morning_tea=m_tea
+                meal.eve_tea=e_tea
+                meal.breakfast=breakfast
+                meal.lunch=lunch
+                meal.dinner=dinner
+                meal.save()
+            else:
+                MealRecord.objects.create(visitor=visitor,
                                 booking=booking,
                                 morning_tea=m_tea,
                                 eve_tea=e_tea,
@@ -511,3 +514,13 @@ booking_to__lte=date2) | Q(booking_from__lte=date2, booking_to__gte=date2))
             available_rooms.append(room)
 
     return available_rooms
+
+
+@login_required(login_url='/accounts/login/')
+def forward_booking(request):
+    if request.method == 'POST':
+        booking_id = request.POST.get('id')
+        BookingDetail.objects.filter(id=booking_id).update(status="Forward")
+        return HttpResponseRedirect('/visitorhostel/')
+    else:
+        return HttpResponseRedirect('/visitorhostel/')

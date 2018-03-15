@@ -73,6 +73,7 @@
 
                     <tbody>
                         {% for booking in active_bookings %}
+
                         <tr>
                             <td onclick=bookingDetailsModal('{{ booking.id }}')>
                                 <h4 class="ui image header">
@@ -92,7 +93,7 @@
                                 <div class="ui large red button center floated"  onclick="checkOutModal('{{ booking.id }}')">
                                     Check Out
                                 </div>
-                                {% else %}
+                                {% else  %}
                                 <div class="ui large green button center floated"  onclick="checkInModal('{{ booking.id }}')">
                                     Check In
                                 </div>

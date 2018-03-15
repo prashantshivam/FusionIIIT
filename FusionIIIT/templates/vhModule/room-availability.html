@@ -24,28 +24,8 @@
                             {{ room.room_floor }}
                         </td>
                         <td>
-                            <div class="field" style="display: none" id=select-{{room.room_number}}>
-                                <div class="ui fluid search selection dropdown">
-                                    <input name="Select" type="hidden" onchange='submit_room_status("{{ room.room_number }}")' id="input-{{room.room_number}}">
-                                    <i class="dropdown icon"></i>
+                            {{ room.status }}
 
-                                    <div class="default text">{{ room.status }}</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="UnderMaintenance">
-                                            Under Maintenance
-                                        </div>
-
-                                        <div class="item" data-value="Available">
-                                            Available
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <span style="display: inline;" id=show-{{room.room_number}} >
-                                {{ room.status }}
-                            </span>
-                            <i class="edit icon" onclick="edit_room_status('{{ room.room_number }}')" style="float: right;" id="submit-{{room.room_number}}"></i>
                         </td>
                     </tr>
                     {% endfor %}
